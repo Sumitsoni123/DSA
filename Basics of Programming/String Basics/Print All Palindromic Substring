@@ -1,0 +1,40 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+
+bool checkP(string str)
+{
+    int l = 0, r = str.length()-1;
+    
+    while(l<=r)
+    {
+        if(str[l] != str[r])
+            return false;
+        
+        l++; r--;    
+    }
+    return true;
+}
+
+void printallpralindrome(string str)
+{
+    // write your code here
+    for(int i=0; i<str.length(); i++)
+    {
+        for(int j=i+1; j<=str.length(); j++)
+        {
+            string s = str.substr(i, j-i);
+            if(checkP(s))
+                cout<<s<<endl;
+        }
+    }
+}
+
+int main()
+{
+    string str;
+    getline(cin, str);
+    printallpralindrome(str);
+    
+    return 0;
+}
