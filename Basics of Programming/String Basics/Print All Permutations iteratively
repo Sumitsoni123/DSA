@@ -1,0 +1,44 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int fact(int n)
+{
+    int a = 1;
+    for(int i=1; i<=n; i++)
+        a*=i;
+    
+    return a;    
+}
+
+void printallperm(string str)
+{
+    //write your code here
+    int n = str.length();
+    int limit = fact(n);
+    int i = 0;
+    
+    while(i<limit)
+    {
+        string s = str;
+        int temp = i;
+        for(int div=n; div>=1; div--)
+        {
+            int r = temp%div;
+            temp = temp/div;
+            cout<<s[r];
+            s.erase(r, 1);
+        }
+        
+        cout<<endl;
+        i++;
+    }
+}
+
+
+int main()
+{
+    string str;
+    getline(cin, str);
+    
+    printallperm(str);
+}
