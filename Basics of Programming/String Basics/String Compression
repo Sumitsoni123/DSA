@@ -1,0 +1,57 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+
+string String_compression01(string str)
+{
+    //write your code here
+    string ans = str.substr(0, 1);
+    
+    for(int i=1; i<str.length(); i++)
+    {
+        if(str[i] != str[i-1])
+            ans += str[i];
+    }
+    
+    return  ans;
+    
+}
+
+string String_compression02(string str)
+{
+    //write your code here
+    string s = str.substr(0,1);
+    int cnt=1;
+    for(int i=1; i<str.length(); i++)
+    {
+        if(str[i-1] == str[i])
+            cnt++;
+        else
+        {
+            if(cnt>1)
+            {
+                s += to_string(cnt);
+                cnt=1;
+            }
+            s+= str[i];
+        }
+    }
+    if(cnt>1)
+    {
+        s += to_string(cnt);
+        cnt=1;
+    }
+	return s;
+    
+}
+
+
+int main()
+{
+    string str;
+    getline(cin, str);
+    cout<<String_compression01(str)<<endl;
+    cout<<String_compression02(str)<<endl;
+    
+    return 0;
+}
