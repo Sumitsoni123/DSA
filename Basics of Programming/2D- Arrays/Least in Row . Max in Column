@@ -1,0 +1,49 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+void saddle_point(int n, vector<vector<int>>& arr)
+{
+    // write your code here
+    for(int i=0; i<n; i++)
+    {
+        int midx = 0;
+        for(int j=1; j<n; j++)
+        {
+            if(arr[i][j] < arr[i][midx])
+                midx = j;
+        }
+        
+        bool flag = true;
+        
+        for(int k=0; k<n; k++)
+        {
+            if(arr[k][midx] > arr[i][midx])
+            {
+                flag = false;
+                break;
+            }
+        }
+        
+        if(flag) 
+        {
+            cout<<arr[i][midx]<<endl;
+            return;
+        }    
+    }
+    
+    cout<<"Invalid input"<<endl;
+}
+
+int main()
+{
+    int n;
+    cin >> n;
+    vector<vector<int>> arr(n, vector<int>(n));
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++)
+            cin >> arr[i][j];
+    
+    saddle_point(n, arr);
+    
+    return 0;
+}
