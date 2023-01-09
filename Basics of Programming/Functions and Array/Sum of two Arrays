@@ -1,0 +1,53 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+    int n1, n2;
+    vector<int> ans;
+    cin>>n1;
+    vector<int> a1(n1);
+    for(auto &i:a1)
+        cin>>i;
+    
+    cin>>n2;
+    vector<int> a2(n2)
+    ;
+    for(auto &i:a2)
+        cin>>i;
+    
+    reverse(a1.begin(), a1.end());
+    reverse(a2.begin(), a2.end());
+    
+    int cry=0,i;
+    for(i=0;i<min(n1,n2);i++)
+    {
+        int p = (cry+a1[i]+a2[i]);
+        cry = p/10;
+        ans.push_back(p%10);
+    }
+    
+    while(i<n1)
+    {
+        int p = cry+a1[i];
+        cry = p/10;
+        ans.push_back(p%10);
+        i++;
+    }
+    while(i<n2)
+    {
+        int p = cry+a2[i];
+        cry = p/10;
+        ans.push_back(p%10);
+        i++;
+    }
+    
+    if(cry)
+        ans.push_back(cry);
+    
+    reverse(ans.begin(), ans.end());    
+    
+    for(auto x:ans)
+        cout<<x<<endl;
+    return 0;
+}
