@@ -1,0 +1,51 @@
+#include <iostream>
+using namespace std;
+
+
+int main() {
+    
+    int n;
+    cin >> n;
+
+    //write your code here
+    
+    int val=1, sp=n/2, st=1;
+    
+    for(int i=1;i<=n;i++)
+    {
+        for(int j=1;j<=sp;j++)
+            cout<<"	";
+        
+        int x=val;
+        for(int j=1;j<=st;j++)
+        {
+            cout<<x<<"	";
+            if(j<=st/2)
+                x++;
+            else
+                x--;
+            
+        }
+        if(i<=n/2)
+        {
+            val++;
+            sp--;
+            st+=2;
+        }
+        else
+        {
+            val--;
+            sp++;
+            st-=2;
+        }
+        cout<<endl;
+    }
+    return 0;
+}
+
+// output
+		1	
+	2	3	2	
+3	4	5	4	3	
+	2	3	2	
+		1	
