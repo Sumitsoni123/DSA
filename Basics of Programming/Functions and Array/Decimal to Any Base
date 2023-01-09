@@ -1,0 +1,29 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+
+int DecToAny(int n, int b) {
+    
+    // write your code here
+    int num = 0, i = 0;
+    while(n)
+    {
+        num+= (n%b)*pow(10, i);
+        n /= b;
+        i++;
+    }
+    
+    return num;
+}
+
+
+int main() {
+    
+    int n;
+    int b;
+    cin >> n;
+    cin >> b;
+    int res = DecToAny(n, b);
+    cout << res << endl;
+  
+}
