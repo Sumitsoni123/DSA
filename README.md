@@ -1,2 +1,2 @@
 
-Open for All to collabrate and enhance time complexity space complexity of this repo
+Open for All to collabrate and enhance complexity of this repo's code
