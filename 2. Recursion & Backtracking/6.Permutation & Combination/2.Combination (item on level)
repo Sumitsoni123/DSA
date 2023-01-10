@@ -1,0 +1,34 @@
+1. You are give a number of boxes (nboxes) and number of identical items (ritems).
+2. You are required to place the items in those boxes and print all such configurations possible.
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+void helper(int currItem, int r, int boxes, vector<char> ds, int lastIdx)
+{
+    if(currItem == r+1)
+    {
+        for(auto v: ds)
+            cout<<v;
+        cout<<endl;
+        return;
+    }
+    
+    for(int i=lastIdx+1; i<boxes; i++)
+    {
+        ds[i] = 'i';
+        helper(currItem+1, r, boxes, ds, i);
+        ds[i] = '-';
+    }
+}
+
+int main()
+{
+    int n, r;
+    cin>>n>>r;
+    vector<char> ds(n, '-');
+    helper(1, r, n, ds, -1);
+    
+    return 0;
+}
