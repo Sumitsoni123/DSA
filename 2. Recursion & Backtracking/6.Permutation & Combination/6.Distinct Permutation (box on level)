@@ -1,0 +1,42 @@
+Given a collection of numbers, nums, that might contain duplicates, return all possible unique permutations in any order.
+
+
+class Solution {
+public:
+    vector<vector<int>> ans;
+    void helper(int currBox, int n, unordered_map<int, int> &freq, vector<int> &ds) {
+
+        if(currBox == n)
+        {
+            ans.push_back(ds);
+            return;
+        }  
+
+        for(auto v : freq)
+        {
+            int key = v.first;
+            int val = v.second;
+            if(val >0)
+            {
+                freq[key]--;
+                ds.push_back(key);
+                helper(currBox+1, n, freq, ds);
+                ds.pop_back();
+                freq[key]++;
+            }
+        }  
+    }
+
+
+    vector<vector<int>> permuteUnique(vector<int>& nums) {
+        
+        // box on level
+        unordered_map<int, int> freq;
+        for(auto v: nums)
+            freq[v]++;
+
+        vector<int> ds;
+        helper(0, nums.size(), freq, ds);
+        return ans;
+    }
+};
