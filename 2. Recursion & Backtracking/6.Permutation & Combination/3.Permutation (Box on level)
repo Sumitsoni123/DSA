@@ -1,0 +1,39 @@
+46. Leetcode
+
+Given an array nums of distinct integers, return all the possible permutations. You can return the answer in any order.
+
+
+class Solution {
+public:
+
+    vector<vector<int>> ans;
+    void helper(int currBox, vector<int> &nums, vector<int> &ds, vector<bool> &vis) {
+
+        if(currBox == nums.size())
+        {
+            ans.push_back(ds);
+            return;
+        }
+
+        for(int i=0; i<nums.size(); i++)
+        {
+            if(vis[i] == false)
+            {
+                vis[i] = true;
+                ds.push_back(nums[i]);
+                helper(currBox+1, nums, ds, vis);
+                ds.pop_back();
+                vis[i] = false;
+            }
+        }
+    }
+
+    vector<vector<int>> permute(vector<int>& nums) {
+    
+        vector<int> ds;
+        vector<bool> vis(nums.size());
+
+        helper(0, nums, ds, vis);
+        return ans;
+    }
+};
