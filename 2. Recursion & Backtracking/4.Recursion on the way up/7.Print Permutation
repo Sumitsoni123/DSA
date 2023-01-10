@@ -1,0 +1,35 @@
+1. You are given a string str.
+2. Complete the body of printPermutations function - without changing signature - to calculate and print all permutations of str.
+Use sample input and output to take idea about permutations.
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+void printPermutations(string str, string asf)
+{
+    if(str.length() == 0)
+    {
+        cout<<asf<<endl;
+        return;
+    }
+    
+    for(int i=0; i<str.length(); i++)
+    {
+        char ch = str[i];
+        string prev = str.substr(0, i);
+        string next = str.substr(i+1);
+        
+        string temp = prev+next;
+        printPermutations(temp, asf+ch);
+    }
+}
+
+int main()
+{
+    string str;
+    cin>>str;
+    printPermutations(str,"");
+    
+    return 0;
+}
