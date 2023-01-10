@@ -1,0 +1,78 @@
+1. You are given a string str of digits. (will never start with a 0)
+2. You are required to encode the str as per following rules
+    1 -> a
+    2 -> b
+    3 -> c
+    ..
+    25 -> y
+    26 -> z
+3. Complete the body of printEncodings function - without changing signature - to calculate and print all encodings of str.
+Use the input-output below to get more understanding on what is required
+123 -> abc, aw, lc
+993 -> iic
+013 -> Invalid input. A string starting with 0 will not be passed.
+103 -> jc
+303 -> No output possible. But such a string maybe passed. In this case print nothing.
+
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+
+void printEncoding(string str, string ans)
+{
+    // write your code here
+    if(str.size() == 0)
+    {
+        cout<<ans<<endl;
+        return;
+    }
+    else if(str.size() == 1)
+    {
+        char ch = str[0];
+        if(ch == '0')
+            return;
+        else
+        {
+            int n = ch-'0';
+            char code = (char)(n+'a'-1);
+            cout<<(ans+code)<<endl;
+        }
+    }
+    else
+    {
+        // taking 1 char 
+        string ch = str.substr(0, 1);
+        string next = str.substr(1);
+        
+        if(ch == "0")
+            return;
+        else
+        {
+            int n = stoi(ch);
+            char code = (char)(n+'a'-1);
+            printEncoding(next, ans+code);
+        }
+        
+        // taking 2 char
+        string s1 = str.substr(0, 2);
+        string s2 = str.substr(2);
+        
+        int prev = stoi(s1);
+        if(prev <=26)
+        {
+            char code = (char)(prev+'a'-1);
+            printEncoding(s2, ans+code);
+        }
+    }
+}
+
+int main()
+{
+    string str;
+    cin>>str;
+    printEncoding(str,"");
+    
+    return 0;
+}
