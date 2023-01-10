@@ -1,0 +1,31 @@
+Given an array nums of distinct integers, return all the possible permutations. You can return the answer in any order.
+
+
+
+
+class Solution {
+public:
+    // this is swap method 
+    vector<vector<int>> ans;
+    void helper(int currBox, vector<int> &nums) {
+
+        if(currBox == nums.size())
+        {
+            ans.push_back(nums);
+            return;
+        }
+
+        for(int i=currBox; i<nums.size(); i++)
+        {
+            swap(nums[currBox], nums[i]);
+            helper(currBox+1, nums);
+            swap(nums[currBox], nums[i]);   
+        }
+    }
+
+    vector<vector<int>> permute(vector<int>& nums) {
+
+        helper(0, nums);
+        return ans;
+    }
+};
