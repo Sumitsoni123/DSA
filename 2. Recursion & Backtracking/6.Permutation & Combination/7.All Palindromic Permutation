@@ -1,0 +1,73 @@
+1. You are given a string of length n.
+2. You have to print all the palindromic permutations of the given string.
+3. If no palindromic permutation exists for the given string, print "-1".
+
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+
+void getPermutations(int cb, map<char, int> frq, string ans)
+{
+    if(cb == ans.length()/2)
+    {
+        cout<<ans<<endl;
+        return;
+    }
+    
+    for(auto v: frq)
+    {
+        char key = v.first;
+        int val = v.second;
+        if(val >0)
+        {
+            ans[cb] = key;
+            ans[ans.length()-1-cb] = key;
+            frq[key] -=2;
+            getPermutations(cb+1, frq, ans);
+            frq[key] +=2;
+            ans[cb] = '0';
+            ans[ans.length()-1-cb] = '0';
+        }
+    }
+}
+
+
+
+int main()
+{
+    string str;
+    cin>>str;
+    
+    map<char, int> frq;
+    for(int i=0; i<str.length(); i++)
+        frq[str[i]]++;
+    
+    
+    char oddFrq = '0';
+    for(auto v: frq)
+    {
+        if((v.second)%2 == 1)
+        {
+            if(oddFrq != '0')
+            {
+                cout<<"-1"<<endl;
+                return 0;
+            }
+            oddFrq = v.first;
+        }
+    }
+    
+    string ans(str.length(), '0');
+    
+    if(str.length()%2 == 1)
+    {
+        ans[str.length()/2] = oddFrq;
+        frq[oddFrq]--;
+    }
+    
+    getPermutations(0, frq, ans);
+    
+    return 0;
+}
