@@ -1,0 +1,44 @@
+Given a collection of numbers, nums, that might contain duplicates, return all possible unique permutations in any order.
+
+
+class Solution {
+public:
+    
+    // ITEM-ON-LEVEL
+    void help(int idx, vector<int> &nums, vector<int> &ds, vector<vector<int>> &ans, unordered_map<int, int> &lastIdx)
+    {
+        
+        if(idx == nums.size())
+        {
+            ans.push_back(ds);
+            return;
+        }
+        
+        int st = lastIdx[nums[idx]];        
+        for(int i=st+1; i<ds.size(); i++)
+        {
+            if(ds[i] == INT_MAX)
+            {
+                ds[i] = nums[idx];
+                lastIdx[nums[idx]] = i;
+                help(idx+1, nums, ds, ans, lastIdx);
+                lastIdx[nums[idx]] = st;
+                ds[i] = INT_MAX;
+            }
+        }
+    }
+    
+    vector<vector<int>> permuteUnique(vector<int>& nums)
+    {     
+        
+        vector<vector<int>> ans;
+  
+        vector<int> ds(nums.size(), INT_MAX);
+        unordered_map<int, int> lastIdx;
+        for(auto e: nums)
+            lastIdx[e] = -1;
+        
+        help(0, nums, ds, ans, lastIdx);
+        return ans;
+    }
+};
