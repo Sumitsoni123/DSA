@@ -1,0 +1,45 @@
+1. You are given a word (may have one character repeat more than once).
+2. You are given an integer k.
+2. You are required to generate and print all ways you can select k distinct characters out of the 
+     word.
+ 
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+void helper(int lastIdx, vector<char> &unique, string res, int k)
+{
+    if(res.length() == k)
+    {
+        cout<<res<<endl;
+        return;
+    }
+    
+    for(int i=lastIdx+1; i<unique.size(); i++)
+    {
+        helper(i, unique, res + unique[i], k);
+    }
+}
+
+
+int main()
+{
+    string str;
+    cin>>str;
+    
+    int k;
+    cin>>k;
+    
+    set<char> s;
+    for(auto c: str){
+        s.insert(c);
+    }
+    vector<char> unique;
+    for(auto c: s)
+        unique.push_back(c);
+    
+    helper(-1, unique, "", k);
+    
+    return 0;
+}
