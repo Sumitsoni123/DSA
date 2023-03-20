@@ -1,0 +1,58 @@
+1. You are given a word (may have one character repeat more than once).
+2. You are given an integer k.
+2. You are required to generate and print all ways you can select k characters out of the word.
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+void combinations(int idx, vector<char> &unique, map<char, int> &freq, string ans, int k)
+{
+
+    if(ans.size() == k)
+    {
+        cout<<ans<<endl;
+        return;
+    }
+    
+    if(idx == unique.size())
+        return;
+        
+    // freq times element lenge
+    int f = freq[unique[idx]];
+    for(int i=f; i>=0; i--)
+    {
+        if(i + ans.size() >k)
+            continue;
+        
+        string temp = ans;    
+        for(int j=1; j<=i; j++)    
+            temp.push_back(unique[idx]);
+            
+        combinations(idx+1, unique, freq, temp, k);
+    }
+    
+}
+
+
+int main()
+{
+    string str;
+    cin>>str;
+    
+    int k;
+    cin>>k;
+    
+    map<char, int> freq;
+    for(char ch: str)
+        freq[ch]++;
+    
+    vector<char> unique;
+    for(auto key: freq)
+        unique.push_back(key.first);
+    
+    
+    combinations(0, unique, freq, "", k);
+    
+    return 0;
+}
