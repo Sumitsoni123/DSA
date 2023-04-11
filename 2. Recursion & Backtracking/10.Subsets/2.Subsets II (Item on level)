@@ -1,0 +1,53 @@
+Given an integer array nums that may contain duplicates, return all possible 
+subsets
+ (the power set).
+
+The solution set must not contain duplicate subsets. Return the solution in any order.
+
+
+
+
+class Solution {
+public:
+    
+    // item on level
+    vector<vector<int>> ans;
+    void helper(int idx, vector<int>& unique, unordered_map<int, int> &freq,  vector<int>& temp) {
+        
+        if(idx == unique.size())
+        {
+            ans.push_back(temp);
+            return;
+        }
+
+        int val = unique[idx];
+        // nhi wali call
+        helper(idx+1, unique, freq, temp);
+
+        
+        for(int f=0; f<freq[val]; f++)
+        {
+            temp.push_back(val);
+            helper(idx+1, unique, freq, temp);
+        }
+
+        for(int f=0; f<freq[val]; f++)
+            temp.pop_back();
+    }
+
+    vector<vector<int>> subsetsWithDup(vector<int>& nums) {    
+        vector<int> unique;
+        unordered_map<int, int> freq;
+        for(int val: nums)
+        {
+            if(freq[val] == 0)
+                unique.push_back(val);
+            freq[val]++;
+        }
+
+        vector<int> temp;
+
+        helper(0, unique, freq, temp);
+        return ans;
+    }
+};
