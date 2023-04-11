@@ -1,0 +1,43 @@
+1. You are given a number n, representing the size of a n * n chess board.
+2. You are required to calculate and print the combinations in which n queens can be placed on the 
+     n * n chess-board. 
+     
+     
+     
+#include<bits/stdc++.h>
+using namespace std;
+
+
+void combinations(int qpsf, int tq, int cellno, string temp)
+{
+    if(cellno == tq*tq)
+    {
+        if(qpsf == tq)
+            cout<<temp<<endl;
+        return;    
+    }
+    
+    // to place queen in last col 
+    if(cellno%tq == tq-1)
+    {
+        combinations(qpsf+1, tq, cellno+1, temp+'q'+'
+');
+        combinations(qpsf, tq, cellno+1, temp+'-'+'
+');
+    }
+    else
+    {
+        combinations(qpsf+1, tq, cellno+1, temp+'q');
+        combinations(qpsf, tq, cellno+1, temp+'-');
+    }
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    string temp;
+    combinations(0, n, 0, temp);
+    
+    return 0;
+}     
