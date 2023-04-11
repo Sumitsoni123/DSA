@@ -1,0 +1,64 @@
+1. You are given a number n, representing the size of a n * n chess board.
+2. You are required to calculate and print the permutations in which n queens can be placed on the 
+     n * n chess-board. 
+     
+     
+
+#include<bits/stdc++.h>
+using namespace std;
+
+
+void permutations(int qpsf, int tq, int cellno, string temp, vector<bool>&vis)
+{
+    if(cellno == tq*tq)
+    {
+        if(qpsf == tq)
+            cout<<temp<<endl<<endl;
+            
+        return;    
+    }
+    
+    // to place queen in last col 
+    if(cellno%tq == tq-1)
+    {
+        for(int i=0; i<tq; i++)
+        {
+            if(vis[i] == false)
+            {
+                vis[i] = true;
+                permutations(qpsf+1, tq, cellno+1, temp+"q"+to_string(i+1)+"	
+", vis);
+                vis[i] = false;
+            }
+        }
+        
+        permutations(qpsf, tq, cellno+1, temp+"-	
+", vis);
+    }
+    else
+    {
+        for(int i=0; i<tq; i++)
+        {
+            if(vis[i] == false)
+            {
+                vis[i] = true;
+                permutations(qpsf+1, tq, cellno+1, temp+"q"+to_string(i+1)+"	", vis);
+                vis[i] = false;
+            }
+        }
+        
+        permutations(qpsf, tq, cellno+1, temp+"-	", vis);
+    }
+}
+
+int main()
+{
+    int n;
+    cin>>n;
+    string temp;
+    vector<bool> vis(n, false);
+    
+    permutations(0, n, 0, temp, vis);
+    
+    return 0;
+}
