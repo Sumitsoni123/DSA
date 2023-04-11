@@ -1,0 +1,54 @@
+Given a collection of candidate numbers (candidates) and a target number (target), find all unique combinations in candidates where the candidate numbers sum to target.
+
+Each number in candidates may only be used once in the combination.
+
+Note: The solution set must not contain duplicate combinations.
+
+
+
+class Solution {
+public:
+
+    // item on level
+    vector<vector<int>> ans;
+    void combinations(int idx,  unordered_map<int, int>& freq, vector<int>& unique, int target, vector<int>& temp) {
+        
+        if(target == 0) {
+            ans.push_back(temp);
+            return;
+        }
+
+        if(idx == unique.size())
+            return;
+
+        int val = unique[idx];
+        for(int f=0; f<=freq[val]; f++)
+        {
+            if(target -f*val < 0)
+                continue;
+            for(int j=1; j<=f; j++)
+                temp.push_back(val);
+            
+            combinations(idx+1, freq, unique, target-f*val, temp);
+
+            for(int j=1; j<=f; j++)
+                temp.pop_back();    
+        }
+    }
+    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+        
+        unordered_map<int, int> freq;
+        vector<int> unique;
+        for(auto v: candidates) 
+        {
+            if(freq[v] == 0)
+                unique.push_back(v);
+            freq[v]++;
+        }    
+        vector<int> temp;
+        combinations(0, freq, unique, target, temp);
+
+        return ans;
+    }
+};
+
