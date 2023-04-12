@@ -1,0 +1,36 @@
+Consider a rat placed at (0, 0) in a square matrix of order N * N. It has to reach the destination at (N - 1, N - 1). Find all possible paths that the rat can take to reach from source to destination. The directions in which the rat can move are 'U'(up), 'D'(down), 'L' (left), 'R' (right). Value 0 at a cell in the matrix represents that it is blocked and rat cannot move to it while value 1 at a cell in the matrix represents that rat can be travel through it.
+Note: In a path, no cell can be visited more than one time. If the source cell is 0, the rat cannot move to any other cell.
+
+
+
+
+class Solution {
+    public:
+    int x[4] = {1, 0, 0, -1};
+    int y[4] = {0, -1, 1, 0};
+    char z[4] = {'D', 'L', 'R','U'};
+    
+    vector<string> ans;
+    void helper(vector<vector<int>> &m, int sr, int sc, string temp) {
+        
+        if(sr <0 || sc <0 || sr == m.size() || sc == m.size() || m[sr][sc] == 0)
+            return;
+        
+        if(sr == m.size()-1 && sc == m.size()-1) {
+            ans.push_back(temp);
+            return;
+        }
+        
+        m[sr][sc] = 0;
+        for(int i=0; i<4; i++) {
+            helper(m, sr+x[i], sc+y[i], temp+z[i]);
+        }
+        m[sr][sc] = 1;
+    }
+    
+    vector<string> findPath(vector<vector<int>> &m, int n) {
+        // Your code goes here
+        helper(m, 0, 0, "");
+        return ans;
+    }
+};
