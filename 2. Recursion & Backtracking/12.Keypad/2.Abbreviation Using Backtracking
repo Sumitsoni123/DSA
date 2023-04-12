@@ -1,0 +1,41 @@
+1. You are given a word.
+2. You have to generate all abbrevations of that word.
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+
+vector<string> ans;
+void helper(string input, string output, int idx, int count)
+{
+    if(idx == input.length())
+    {
+        if(count >0)
+            ans.push_back(output+to_string(count));
+        else
+            ans.push_back(output);
+        return;    
+    }
+    
+    // yes
+    char ch = input[idx];
+    helper(input, output+((count >0)? to_string(count): "")+ch, idx+1,0);
+    
+    // no
+    helper(input, output, idx+1, count+1);
+}
+
+
+int main()
+{
+    string input;
+    cin >> input;
+    
+    helper(input, "", 0, 0);
+    
+    for(auto v: ans)
+        cout<<v<<endl;
+    
+    return 0;    
+}
