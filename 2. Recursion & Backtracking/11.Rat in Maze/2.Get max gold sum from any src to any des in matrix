@@ -1,0 +1,52 @@
+In a gold mine grid of size m x n, each cell in this mine has an integer representing the amount of gold in that cell, 0 if it is empty.
+
+Return the maximum amount of gold you can collect under the conditions:
+
+Every time you are located in a cell you will collect all the gold in that cell.
+From your position, you can walk one step to the left, right, up, or down.
+You can't visit the same cell more than once.
+Never visit a cell with 0 gold.
+You can start and stop collecting gold from any position in the grid that has some gold.
+
+
+
+
+class Solution {
+public:
+    
+    int x[4] = {1, 0, 0, -1};
+    int y[4] = {0, -1, 1, 0};
+    int dfs(int sr, int sc, vector<vector<int>>& grid)
+    {
+        if(sr < 0 || sc < 0 || sr >= grid.size() || sc >= grid[0].size() || grid[sr][sc] == 0) 
+            return 0;
+        
+        
+        int val = grid[sr][sc];
+        grid[sr][sc] = 0;
+        
+        int maxGold = 0;
+        for(int i=0; i<4; i++)
+            maxGold = max(maxGold, dfs(sr+x[i], sc+y[i], grid));
+        
+        grid[sr][sc] = val;
+        return grid[sr][sc] + maxGold;
+    }
+    
+    
+    int getMaximumGold(vector<vector<int>>& grid) 
+    {
+        int maxGold = 0;
+        
+        for(int i=0; i<grid.size(); i++)
+        {
+            for(int j=0; j<grid[0].size(); j++)
+            {
+                int curr = dfs(i, j, grid);
+                maxGold = max(maxGold, curr);
+            }
+        }
+        
+        return maxGold;
+    }
+};
