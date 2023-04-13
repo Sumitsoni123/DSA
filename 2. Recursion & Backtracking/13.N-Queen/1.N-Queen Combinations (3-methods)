@@ -1,0 +1,202 @@
+The n-queens puzzle is the problem of placing n queens on an n x n chessboard such that no two queens attack each other.
+
+Given an integer n, return all distinct solutions to the n-queens puzzle. You may return the answer in any order.
+
+Each solution contains a distinct board configuration of the n-queens' placement, where 'Q' and '.' both indicate a queen and an empty space, respectively.
+
+
+
+
+class Solution {
+public:
+    
+    //  tc = n
+    bool isSafe(int r, int c, vector<vector<bool>> &vis)
+    {
+        // // row me  not required for method-2
+        // for(int i=0; i<c; i++)
+        // {
+        //     if(vis[r][i])
+        //         return false;
+        // }
+        
+        // col me
+        for(int i=0; i<r; i++)
+        {
+            if(vis[i][c])
+                return false;
+        }
+        
+        // left diag
+        int i=r, j=c;
+        while(i >=0 && j >=0)
+        {
+            if(vis[i][j])
+                return false;
+            i--; j--;
+        }
+        
+        // right diag
+        i=r, j=c;
+        while(i >= 0 && j < vis.size())
+        {
+            if(vis[i][j])
+                return false;
+            i--; j++;
+        }
+        
+        return true;
+        
+    }
+    
+    
+    // tc = 1
+    bool checkSafe(int r, int c, vector<bool> &ld, vector<bool> &rd, vector<bool> &col)
+    {
+        int n = col.size();
+        return (ld[c-r+n-1] || rd[r+c] || col[c]) ? false : true; 
+    }
+    
+    
+    // Method-1  and TC = (2^(n^2)) + n*(n^2)   [pow(calls, h) + (pre+post)*h]
+    void helper(int r, int c, int qpsf, vector<vector<bool>> &vis, vector<vector<string>> &ans)
+    {
+        if(qpsf == vis.size())
+        {
+            vector<string> temp;
+            for(int i=0; i<vis.size(); i++)
+            {
+                string res = "";
+                for(int j=0; j<vis.size(); j++)
+                {
+                    if(vis[i][j])
+                        res += 'Q';
+                    else
+                        res += '.';
+                }
+                
+                temp.push_back(res);
+            }
+            ans.push_back(temp);
+            return;
+        }
+        
+        if(r == vis.size())     
+            return;
+        
+        // yes wali call
+        if(isSafe(r, c, vis) == true)
+        {
+            vis[r][c] = true;
+            
+            if(c == vis.size()-1)
+                helper(r+1, 0, qpsf+1, vis, ans);
+            else
+                helper(r, c+1, qpsf+1, vis, ans);
+            
+            vis[r][c] = false;
+        }
+        
+        
+        // no wali call
+        if(c == vis.size()-1)
+            helper(r+1, 0, qpsf, vis, ans);
+        else
+            helper(r, c+1, qpsf, vis, ans);
+        
+    }
+    
+    
+    // Method-2 and TC = (4^n) + n*n  using backtracking
+    void help(int currRow, vector<vector<bool>> &vis, vector<vector<string>> &ans)
+    {
+        if(currRow == vis.size())
+        {
+            vector<string> temp;
+            for(int i=0; i<vis.size(); i++)
+            {
+                string res = "";
+                for(int j=0; j<vis.size(); j++)
+                {
+                    if(vis[i][j])
+                        res += 'Q';
+                    else
+                        res += '.';
+                }
+                
+                temp.push_back(res);
+            }
+            ans.push_back(temp);
+            return;
+        }
+        
+        for(int c=0; c<vis.size(); c++)
+        {
+            if(isSafe(currRow, c, vis))
+            {
+                vis[currRow][c] = true;
+                help(currRow+1, vis, ans);
+                vis[currRow][c] = false;
+            }
+        }
+        
+    }
+    
+    
+    //  method -3  TC = 4^n + (k*n)  using branch and bound to checkSafe optimally
+    void helping(int currRow, vector<vector<bool>> &vis, vector<vector<string>> &ans, vector<bool> &ld, vector<bool> &rd, vector<bool> &col)
+    {
+        if(currRow == vis.size())
+        {
+            vector<string> temp;
+            for(int i=0; i<vis.size(); i++)
+            {
+                string res = "";
+                for(int j=0; j<vis.size(); j++)
+                {
+                    if(vis[i][j])
+                        res += 'Q';
+                    else
+                        res += '.';
+                }
+                
+                temp.push_back(res);
+            }
+            ans.push_back(temp);
+            return;
+        }
+        
+        
+        for(int c=0; c<vis.size(); c++)
+        {
+            if(checkSafe(currRow, c, ld, rd, col))
+            {
+                vis[currRow][c] = ld[c-currRow+vis.size()-1] = rd[currRow+c] = col[c] = true;
+                helping(currRow+1, vis, ans, ld, rd, col);
+                vis[currRow][c] = ld[c-currRow+vis.size()-1] = rd[currRow+c] = col[c] = false;
+            }
+        }
+    }
+    
+    
+    vector<vector<string>> solveNQueens(int n)
+    {      
+        vector<vector<string>> ans;
+        vector<vector<bool>> vis(n, vector<bool> (n, false));
+        
+        // method-1
+        // helper(0, 0, 0, vis, ans);
+        
+        // method-2
+        // help(0, vis, ans);
+        
+        // method-3
+        vector<bool> ld(2*n-1, false);
+        vector<bool> rd(2*n-1, false);
+        vector<bool> col(n, false);
+        
+        helping(0, vis, ans, ld, rd, col);
+        
+        return ans;
+    }
+};
