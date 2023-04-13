@@ -1,0 +1,112 @@
+1. You are given a number n, representing the size of a n * n chess board.
+2. You are required to calculate and print the permutations in which n queens (distinct) can be 
+     placed on the n * n chess-board. 
+3. No queen shall be able to kill another.
+
+
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+
+bool isSafe(int r, int c, vector<vector<int>> &vis)
+{
+    // row me
+    for(int i=0; i<c; i++)
+    {
+        if(vis[r][i])
+            return false;
+    }
+    
+    // col me
+    for(int i=0; i<r; i++)
+    {
+        if(vis[i][c])
+            return false;
+    }
+    
+    // left diag
+    int i=r, j=c;
+    while(i >=0 && j >=0)
+    {
+        if(vis[i][j])
+            return false;
+        i--; j--;
+    }
+    
+    // right diag
+    i=r, j=c;
+    while(i >= 0 && j < vis.size())
+    {
+        if(vis[i][j])
+            return false;
+        i--; j++;
+    }
+    
+    return true;
+        
+}
+
+vois helper(int qpsf, int r, int c, vector<bool> &queenPlaced, vector<vector<int>> &chess)
+{   
+    int n = queenPlaced.size();
+    if(qpsf == n) 
+    {
+        for(int i=0; i<n; i++)
+        {
+            for(int j=0; j<n; j++)
+            {
+                if(chess[i][j] >0)
+                    cout<<"q"<<chess[i][j]<<"\t";
+                else
+                    cout<<"-\t"
+            }
+            cout<<endl;
+        }
+        cout<<endl;
+        return;
+    }
+    
+    if(r == n)
+        return;
+        
+    // nhi wali
+    if(c == n-1) 
+        helper(qpsf, r+1, 0, queenPlaced, chess);
+    else
+         helper(qpsf, r, c+1, queenPlaced, chess);
+    
+    // yes wali call 
+    for(int q=0; q<n; q++)
+    {
+        if(queenPlaced[q] == false && isSafe(r, c, chess))
+        {
+            queenPlaced[q] = true;
+            chess[r][c] = (q+1);
+            
+            if(c == n-1) 
+                helper(qpsf+1, r+1, 0, queenPlaced, chess);
+            else
+                helper(qpsf+1, r, c+1, queenPlaced, chess);
+            
+            chess[r][c] = 0;
+            queenPlaced[q] = false;
+        }
+    }
+}
+
+
+int main()
+{
+    int n;
+    cin>>n;
+    
+    vector<vector<int>> chess(vector<int> (n, 0));
+    vector<bool> queenPlaced(n, false);
+    
+    helper(0, 0, 0, queenPlaced, chess);
+    
+    return 0;
+}
+    
