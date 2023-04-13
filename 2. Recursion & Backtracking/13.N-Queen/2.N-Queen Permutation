@@ -5,7 +5,6 @@
 
 
 
-
 #include<bits/stdc++.h>
 using namespace std;
 
@@ -48,7 +47,7 @@ bool isSafe(int r, int c, vector<vector<int>> &vis)
         
 }
 
-vois helper(int qpsf, int r, int c, vector<bool> &queenPlaced, vector<vector<int>> &chess)
+void helper(int qpsf, int r, int c, vector<bool> &queenPlaced, vector<vector<int>> &chess)
 {   
     int n = queenPlaced.size();
     if(qpsf == n) 
@@ -60,7 +59,7 @@ vois helper(int qpsf, int r, int c, vector<bool> &queenPlaced, vector<vector<int
                 if(chess[i][j] >0)
                     cout<<"q"<<chess[i][j]<<"\t";
                 else
-                    cout<<"-\t"
+                    cout<<"-\t";
             }
             cout<<endl;
         }
@@ -102,7 +101,7 @@ int main()
     int n;
     cin>>n;
     
-    vector<vector<int>> chess(vector<int> (n, 0));
+    vector<vector<int>> chess(n, vector<int> (n, 0));
     vector<bool> queenPlaced(n, false);
     
     helper(0, 0, 0, queenPlaced, chess);
