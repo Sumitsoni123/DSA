@@ -1,0 +1,75 @@
+Determine if a 9 x 9 Sudoku board is valid. Only the filled cells need to be validated according to the following rules:
+
+Each row must contain the digits 1-9 without repetition.
+Each column must contain the digits 1-9 without repetition.
+Each of the nine 3 x 3 sub-boxes of the grid must contain the digits 1-9 without repetition.
+Note:
+
+A Sudoku board (partially filled) could be valid but is not necessarily solvable.
+Only the filled cells need to be validated according to the mentioned rules.
+
+
+
+class Solution {
+public:
+    
+    bool isSafe(vector<vector<char>>& board, int row, int col, char num) {
+        
+        for(int i=0; i<9; i++) {
+            
+            if(i != row and board[i][col] == num)
+                return false;
+            if(i != col and board[row][i] == num)
+                return false;
+
+            if(row != 3*(row/3)+i/3 and col != 3*(col/3) + i%3 and board[3*(row/3)+i/3][3*(col/3) + i%3] == num) 
+               return false;
+    
+        }
+        return true;
+    }
+    
+    // ------------------------------------------- Recursive Solutions ---------------------------------------------------------------- 
+    bool sudokuSolver(vector<vector<char>>& board, int row, int col) {       
+
+        if(row == 9)    return true;
+
+        int nextRow = (col == 8)? row+1: row;
+        int nextCol = (col == 8)? 0: col+1;
+
+        if(board[row][col] != '.') {
+
+            if(!isSafe(board, row, col, board[row][col]))
+                return false;
+        }
+
+        return  sudokuSolver(board, nextRow, nextCol);
+    }
+
+    bool isValidSudoku(vector<vector<char>>& board) {       
+        
+        return sudokuSolver(board, 0, 0);
+    }
+    
+    
+    //--------------------------------------------- Iterative Solutions -----------------------------------------------------------------
+  
+    bool isValidSudoku(vector<vector<char>>& board) {       
+        
+        int n = board.size();
+        for(int i=0; i<n; i++)
+        {
+            for(int j=0; j<n; j++)
+            {
+                if(board[i][j] != '.')
+                {
+                    if(!isSafe(board, i, j, board[i][j])){
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+    
+};
