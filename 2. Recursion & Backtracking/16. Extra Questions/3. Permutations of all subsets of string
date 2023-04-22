@@ -1,0 +1,38 @@
+You have n  tiles, where each tile has one letter tiles[i] printed on it.
+
+Return the number of possible non-empty sequences of letters you can make using the letters printed on those tiles.
+
+
+
+class Solution {
+public:
+    int ans = 0;
+    void helper(int box, unordered_map<char, int> freq, string tiles) {
+        if(box == tiles.size())
+            return;
+        
+        for(auto &p : freq)
+        {
+            if(p.second > 0)
+            {
+                tiles[box] = p.first;
+                p.second--;
+                ans++;
+                
+                helper(box+1, freq, tiles);
+                tiles[box] = 0;
+                p.second++;
+            }
+        }
+    }
+    
+    int numTilePossibilities(string tiles) {
+        unordered_map<char, int> freq;
+        
+        for(auto ch: tiles)
+            freq[ch]++;
+        
+        helper(0, freq, tiles);
+        return ans;
+    }
+};
