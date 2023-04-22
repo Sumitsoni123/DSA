@@ -1,0 +1,62 @@
+1. You are given an integer n, which represents n friends numbered from 1 to n.
+2. Each one can remain single or can pair up with some other friend.
+3. You have to print all the configurations in which friends can remain single or can be paired up.
+
+Note -> Check out the question video and write the recursive code as it is intended without 
+               changing signature. The judge can't force you but intends you to teach a concept.
+               
+               
+               
+
+#include<bits/stdc++.h>
+using namespace std;
+
+static int cnt = 1;
+void helper(int total, bool vis[], string asf)
+{
+    int i = 0;
+    for(int j=1; j<=total; j++)
+    {
+        if(vis[j] == false)
+        {
+            i = j;
+            break;
+        }
+    }
+    
+    if(i == 0)
+    {
+        cout<<cnt<<"."<<asf<<"
+";
+        cnt++;
+        return;
+    }
+    
+    vis[i] = true;
+    // i akle aya
+    helper(total, vis, asf+"("+ to_string(i) +") ");
+    
+    // i j sath me aye
+    for(int j=1; j<=total; j++)
+    {
+        if(vis[j] == false)
+        {
+            vis[j] = true;
+            helper(total, vis, asf+"("+ to_string(i) +','+ to_string(j) +") ");
+            vis[j] = false;
+        }
+    }
+    
+    vis[i] = false;
+    
+}
+
+int main() 
+{
+    int n;
+    cin>>n;
+    bool vis[n+1] = {false};
+    
+    helper(n, vis, "");
+    return 0;
+}
