@@ -28,10 +28,11 @@ class Solution {
         
         for(int i=1; i<n; i++)
         {
-            if(lastEnd <= arr[i].first)    
-                cnt++;
-            
-             lastEnd = arr[i].second;
+            if(lastEnd < arr[i].first)    
+            {
+                cnt++;  
+                lastEnd = arr[i].second;
+            }
         }
         
         return cnt;
