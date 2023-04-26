@@ -1,0 +1,52 @@
+Given a set of N jobs where each jobi has a deadline and profit associated with it.
+
+Each job takes 1 unit of time to complete and only one job can be scheduled at a time. We earn the profit associated with job if and only if the job is completed by its deadline.
+
+Find the number of jobs done and the maximum profit.
+
+Note: Jobs will be given in the form (Jobid, Deadline, Profit) associated with that Job.
+
+
+
+class Solution 
+{
+    public:
+    //Function to find the maximum profit and the number of jobs done.
+    static bool compareJob(Job a, Job b)
+    {
+        // decreasing order of profit
+        return (a.profit > b.profit);   
+    }
+    vector<int> JobScheduling(Job arr[], int n) 
+    { 
+        // your code here
+        sort(arr, arr+n, compareJob);
+        int maxD = arr[0].dead;
+        for(int i=1; i<n; i++)
+            maxD = max(maxD, arr[i].dead);
+            
+        int slot[maxD+1];
+        for(int i=0; i<=maxD; i++)
+            slot[i] = -1;
+            
+        int jobCnt = 0, profit = 0;    
+            
+        for(int i=0; i<n; i++)
+        {
+            for(int j=arr[i].dead; j>0; j--)
+            {
+                if(slot[j] == -1)
+                {
+                    slot[j] = i;
+                    profit += arr[i].profit;
+                    jobCnt ++;
+                    break;
+                }
+            }
+        }
+        vector<int> ans;
+        ans.push_back(jobCnt);
+        ans.push_back(profit);
+        return ans;
+    } 
+};
