@@ -1,0 +1,64 @@
+1. You are given a number N and two sorted matrices(A and B) of N*N dimensions.
+2. You are also given a number X.
+3. You have to find the count of all valid pairs from matrices whose sum is equal to X.
+4. A pair is called valid if one element of the pair is selected from A and the second element is selected from B.
+
+
+
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int solve(vector<vector<int>> &nums1, vector<vector<int>> &nums2, int k)
+{
+    int n = nums1.size();
+    int l = 0, r = (n*n)-1;
+    int cnt = 0;
+    
+    while(l < r)
+    {
+        int r1 = l/n;
+        int c1 = l%n;
+        
+        int r2 = r/n;
+        int c2 = r%n;
+        
+        int sum = nums1[r1][c1] + nums2[r2][c2];
+        if(sum < k)
+            l++;
+        else if(sum > k)
+            r--;
+        else {
+            cnt++;
+            l++;
+            r--;
+        }
+    }
+    
+    return cnt;
+}
+
+void input2d(vector<vector<int>> &arr)
+{
+    for (int i = 0; i < arr.size(); i++)
+        for (int j = 0; j < arr[0].size(); j++)
+            cin >> arr[i][j];
+}
+
+
+int main()
+{
+    int n;
+    cin >> n;
+
+    vector<vector<int>> arr1(n, vector<int>(n, 0));
+    input2d(arr1);
+
+    vector<vector<int>> arr2(n, vector<int>(n, 0));
+    input2d(arr2);
+
+    int k;
+    cin >> k;
+
+    return 0;
+}
