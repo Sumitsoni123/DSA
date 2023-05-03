@@ -1,0 +1,20 @@
+Given a sorted list of numbers and a target Z, return the number of pairs according to following definition: (X,Y) where X+Y >= Z
+
+
+
+const pairs = (nums,target) => {
+
+  let left = 0, right = nums.length, output = 0
+  while(left < right) {
+    const sum = nums[left] + nums[right]
+    if (sum >= target) {
+      // since nums[right] + nums[left] works
+      // nums[right] + nums[left+1] works too... all the way to nums[right]+nums[right-1]
+      output+=(right-left)
+      right--
+    } else {
+      left++
+    }
+  }
+  return output
+}
