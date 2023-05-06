@@ -1,0 +1,58 @@
+Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.
+
+Notice that the solution set must not contain duplicate triplets.
+
+
+
+// TC- O(N^2)
+class Solution {
+public:
+    vector<vector<int>> twoSum(vector<int>& nums, int l, int r, int target) {
+        vector<vector<int>> ans;
+        int start = l;
+        while(l < r)
+        {
+            if(l > start && nums[l-1] == nums[l]){
+                l++; continue;
+            }
+            
+            int sum = nums[l] + nums[r];
+            if(sum == target)
+            {
+                vector<int> temp;
+                temp.push_back(nums[l]);
+                temp.push_back(nums[r]);
+                ans.push_back(temp);
+                
+                l++; r--;
+            }
+            else if(sum < target)
+                l++;
+            else
+                r--;
+        }
+        
+        return ans;
+    }
+    
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        vector<vector<int>> ans;
+        sort(nums.begin(), nums.end());
+        
+        for(int f=0; f<nums.size(); f++)
+        {
+            if(f > 0 && nums[f-1] == nums[f])
+                continue;
+            
+            vector<vector<int>> triplet = twoSum(nums, f+1, nums.size()-1, -nums[f]);
+            
+            for(vector<int> p: triplet )
+            {
+                p.insert(p.begin(), nums[f]);
+                ans.push_back(p);
+            }
+        }
+        
+        return ans;
+    }
+};
