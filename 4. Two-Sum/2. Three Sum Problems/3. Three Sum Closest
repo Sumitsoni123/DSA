@@ -1,0 +1,64 @@
+Given an integer array nums of length n and an integer target, find three integers in nums such that the sum is closest to target.
+
+Return the sum of the three integers.
+
+You may assume that each input would have exactly one solution.
+
+
+// TC- O(N^2)
+class Solution {
+public:
+    int twoSumClosest(vector<int>& nums, int left, int target) {
+        
+        int right = nums.size()-1;
+        int abs = INT_MAX;
+        int ans = INT_MAX;
+        
+        while(left < right)
+        {
+            int sum = nums[left] + nums[right];
+            if(sum == target)
+                return sum;
+            
+            else if(sum > target)
+            {
+                if(sum - target < abs)
+                {
+                    abs = sum - target;
+                    ans = sum;
+                }
+                right--;
+            }
+            else
+            {
+                if(target - sum < abs)
+                {
+                    abs = target - sum;
+                    ans = sum;
+                }
+                left++;
+            }
+        }
+        return ans;
+    }
+    
+    int threeSumClosest(vector<int>& nums, int target) {
+         sort(nums.begin(), nums.end());
+        
+        int ans = 0;
+        int diff = INT_MAX;
+        
+        for(int i=0; i<nums.size()-2; i++)
+        {
+            int curr = twoSumClosest(nums, i+1, target-nums[i]) + nums[i];
+            
+            if(abs(curr - target) < diff)
+            {
+                diff = abs(curr - target);
+                ans = curr;
+            }
+        }
+        
+        return ans;
+    }
+};
