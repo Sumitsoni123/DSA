@@ -1,0 +1,79 @@
+Given an array nums of n integers, return an array of all the unique quadruplets [nums[a], nums[b], nums[c], nums[d]] such that:
+
+0 <= a, b, c, d < n
+a, b, c, and d are distinct.
+nums[a] + nums[b] + nums[c] + nums[d] == target
+You may return the answer in any order.
+
+
+// TC- O(N^3)
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+class Solution {
+public:
+    vector<vector<int>> twoSum(vector<int>& nums, int left, long long target) {
+        int right = nums.size()-1;
+        
+        vector<vector<int>> ans;
+        int start = left;
+        while(left < right)
+        {
+            if(left > start && nums[left] == nums[left-1]) {
+                left++; 
+                continue;
+            }
+            
+            long long sum = nums[left] + nums[right];
+            
+            if(sum == target)
+            {                
+                vector<int> temp;
+                temp.push_back(nums[left]);
+                temp.push_back(nums[right]);
+                ans.push_back(temp);
+                
+                left++; right--;
+            }
+            
+            else if(sum < target)
+                left++;
+            else 
+                right--;
+        }
+        
+        return ans;
+    }
+    
+    vector<vector<int>> kSum(vector<int>& nums, int start, long long target, int k) {
+        
+        if(k == 2)
+            return twoSum(nums, start, target);
+        
+        vector<vector<int>> ans;
+        for(int i=start; i<=nums.size()-k; i++)
+        {
+            if(i > start && nums[i] == nums[i-1])
+                continue;
+            
+            vector<vector<int>> temp = kSum(nums, i+1, target-nums[i], k-1);
+            for(vector<int>& v: temp)
+            {
+                v.insert(v.begin(), nums[i]);
+                ans.push_back(v);
+            }
+        }
+        
+        return ans;
+    }
+    
+    vector<vector<int>> fourSum(vector<int>& nums, int target) {
+        vector<vector<int>> temp;
+        if(nums.size() < 4)
+            return temp;
+        sort(nums.begin(), nums.end());
+        return kSum(nums, 0, target, 4);
+    }
+};
