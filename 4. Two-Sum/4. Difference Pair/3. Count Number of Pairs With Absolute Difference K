@@ -1,0 +1,31 @@
+Given an integer array nums and an integer k, return the number of pairs (i, j) where i < j such that |nums[i] - nums[j]| == k.
+
+The value of |x| is defined as:
+
+x if x >= 0.
+-x if x < 0.
+
+
+// TC- O(N)
+#include <bits/stdc++.h>
+class Solution {
+public:
+    int countKDifference(vector<int>& nums, int k) {
+        unordered_map<int, int> freq;
+
+        for(int i=0; i<nums.size(); i++)
+            freq[nums[i]]++;
+
+        int count = 0;
+        for(auto& it: freq)
+        {
+            int freq1 = it.second;
+            if(freq.find(it.first+k) != freq.end()) {
+                 int freq2 = freq[it.first + k];
+                count += freq1*freq2;
+            }
+        }
+
+        return count;
+    }
+};
