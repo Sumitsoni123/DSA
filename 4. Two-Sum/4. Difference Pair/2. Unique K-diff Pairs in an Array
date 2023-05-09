@@ -1,0 +1,46 @@
+Given an array of integers nums and an integer k, return the number of unique k-diff pairs in the array.
+
+A k-diff pair is an integer pair (nums[i], nums[j]), where the following are true:
+
+0 <= i, j < nums.length
+i != j
+nums[i] - nums[j] == k
+Notice that |val| denotes the absolute value of val.
+
+
+// TC - O(nlogn)
+class Solution {
+public:
+    int findPairs(vector<int>& nums, int target) {
+        sort(nums.begin(), nums.end());
+        
+        int left = 0, right = 1, n = nums.size();
+        int cnt = 0;
+        while(left < n && right < n)
+        {
+            if(left > 0 && nums[left] == nums[left-1]) 
+            {
+                left++; continue;
+            }
+            
+            if(left == right)
+            {
+                right++; continue;
+            }
+            
+            int diff = nums[right] - nums[left];
+            
+            if(diff == target) 
+            {
+                cnt++; left++;
+            }
+            
+            else if(diff < target)
+                right++;
+            else
+                left++;
+        }
+        
+        return cnt;
+    }
+};
