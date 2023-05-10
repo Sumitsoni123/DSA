@@ -1,0 +1,31 @@
+Given two strings s1 and s2, return true if s2 contains a permutation of s1, or false otherwise.
+
+In other words, return true if one of s1's permutations is the substring of s2.
+
+
+
+class Solution {
+public:
+    bool checkInclusion(string s1, string s2) {
+        array<int, 26> req = {0};
+        int win = s1.length();
+        
+        for(int i=0; i<win; i++)
+            req[s1[i]-'a']++;
+        
+        array<int, 26> curr = {0};
+        
+        for(int i=0; i<s2.length(); i++)
+        {
+            curr[s2[i]-'a']++;
+            
+            if(i >= win) 
+                curr[s2[i-win]-'a']--;
+            
+            if(curr == req)
+                return true;
+        }
+        
+        return false;
+    }
+};
