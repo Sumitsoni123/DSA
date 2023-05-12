@@ -1,29 +1,20 @@
-Given a binary array nums and an integer k, return the maximum number of consecutive 1's in the array if you can flip at most k 0's.
-
+Given a binary array nums, return the maximum number of consecutive 1's in the array.
 
 
 
 class Solution {
 public:
-    int longestOnes(vector<int>& nums, int k) {
-        
-        int left = 0, mx = 0, zeros = 0;
-        
-        for(int right=0; right<nums.size(); right++)
+    int findMaxConsecutiveOnes(vector<int>& nums) {
+        int cnt = 0, maxCnt = INT_MIN;
+        for(auto &v: nums)
         {
-            if(nums[right] == 0)
-                zeros++;
-            
-            while(zeros > k)
-            {
-                if(nums[left] == 0)
-                    zeros--;
-                left++;
-            }
-            
-            mx = max(mx, right-left +1);
+            if(v == 1)
+                cnt++;
+            else
+                cnt = 0;    
+            maxCnt = max(cnt, maxCnt);    
         }
-        
-        return mx;
+
+        return maxCnt;
     }
 };
