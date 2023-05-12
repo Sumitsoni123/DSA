@@ -1,0 +1,56 @@
+Given two strings s and t of lengths m and n respectively, return the minimum window 
+substring
+ of s such that every character in t (including duplicates) is included in the window. If there is no such substring, return the empty string "".
+
+The testcases will be generated such that the answer is unique.
+
+
+
+
+class Solution {
+public:
+    string minWindow(string s, string t) {
+        
+        if(t == "" || s == "" || s.length() < t.length())
+            return "";
+        
+        unordered_map<char, int> req;
+        unordered_map<char, int> curr;
+        
+        for(int i=0; i<t.length(); i++)
+            req[t[i]]++;
+        
+        int dist_size = req.size();
+        
+        int matchCnt = 0, left = 0, start = 0, minLen = INT_MAX;
+        
+        for(int right = 0; right < s.length(); right++)
+        {        
+            char ch = s[right];
+            curr[ch]++;
+            
+            if(curr[ch] == req[ch])
+                matchCnt++;
+            
+            while(matchCnt == dist_size)
+            {   
+                if(matchCnt == dist_size && right-left+1 < minLen)
+                {
+                    minLen = right-left+1;
+                    start = left;
+                }
+                char ch = s[left++];
+                curr[ch]--;
+                
+                if(curr[ch]<req[ch])
+                    matchCnt--;
+            }
+        }
+        
+        if(minLen == INT_MAX)
+            return "";
+        
+        string ans = s.substr(start, minLen);
+            return ans;
+    }
+};
