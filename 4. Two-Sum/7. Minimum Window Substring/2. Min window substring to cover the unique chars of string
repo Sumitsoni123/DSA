@@ -1,0 +1,67 @@
+Given a string 's'. The task is to find the smallest window length that contains all the characters of the given string at least one time.
+For eg. A = aabcbcdbca, then the result would be 4 as of the smallest window will be dbca.
+
+
+
+//{ Driver Code Starts
+#include <bits/stdc++.h>
+using namespace std;
+
+
+// } Driver Code Ends
+class Solution{
+    public:
+    int findSubString(string str)
+    {
+        unordered_map<char, int> req;
+        unordered_map<char, int> curr;
+        
+        for(auto ch: str)
+            req[ch]++;
+        
+        int dist_cnt = req.size();
+        int left = 0, start = 0, minLen = INT_MAX, cnt = 0;
+        
+        for(int right = 0; right < str.length(); right++)
+        {
+            curr[str[right]]++;
+            
+            if(curr[str[right]] == 1)
+                cnt++;
+                
+           if(cnt == dist_cnt)
+           {
+               while(curr[str[left]] > 1)
+               {
+                   curr[str[left]]--;
+                   left++;
+               }
+               
+               if(right-left+1 < minLen)
+               {
+                   minLen = right-left+1;
+                   start = left;
+               }
+           }
+        }
+        
+        string ans = str.substr(start, minLen);
+        return ans.size();
+    }
+};
+
+//{ Driver Code Starts.
+// Driver code
+int main() {
+    int t;
+    cin >> t;
+    while (t--) {
+
+        string str;
+        cin >> str;
+        Solution ob;
+        cout << ob.findSubString(str) << endl;
+    }
+    return 0;
+}
+// } Driver Code Ends
