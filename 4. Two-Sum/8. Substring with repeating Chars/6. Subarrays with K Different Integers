@@ -1,0 +1,39 @@
+Given an integer array nums and an integer k, return the number of good subarrays of nums.
+
+A good array is an array where the number of different integers in that array is exactly k.
+
+For example, [1,2,3,1,2] has 3 different integers: 1, 2, and 3.
+A subarray is a contiguous part of an array.
+
+
+
+class Solution {
+    public int atmostk(int[] nums, int k) {
+        HashMap<Integer, Integer> frq = new HashMap<>();
+		int count = 0, left = 0;
+		for(int right=0; right<nums.length; right++)
+		{
+		    int ch = nums[right];
+		    frq.put(ch, frq.getOrDefault(ch, 0)+ 1);
+		    
+		    while(frq.size() >k)
+		    {
+		        int c = nums[left];
+		        int f = frq.getOrDefault(c, 0);
+		        if(f == 1)
+		            frq.remove(c);
+		        else
+		            frq.put(c, frq.getOrDefault(c, 0)- 1);
+		        left++;
+		    }
+		    
+	        count +=  right-left+1;
+		}
+		
+		return count;
+    }
+    
+    public int subarraysWithKDistinct(int[] nums, int k){
+        return atmostk(nums, k) - atmostk(nums, k-1);
+    }
+}
