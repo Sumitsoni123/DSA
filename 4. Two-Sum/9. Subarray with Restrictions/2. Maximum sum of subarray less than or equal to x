@@ -1,0 +1,32 @@
+Given an array arr[] of integers of size N and a number X, the task is to find the sum of subarray having maximum sum less than or equal to the given value of X.
+
+
+
+class Solution{
+
+
+	public:
+	int findMaxSubarraySum(long long arr[], int n, long long k)
+	{
+	    // Your code goes here
+	    long long sum = 0, maxSum = 0,  i=0;
+	    for(int j=0; j<n; j++)
+	    {
+	        sum+=arr[j];
+	        
+	        while(sum >k)
+	        {
+	            sum-=arr[i];
+	            i++;
+	        }
+	        maxSum = max(maxSum, sum);
+	    }
+	    
+	    return (int)maxSum;
+	}  
+
+		 
+
+};
+	  
+
