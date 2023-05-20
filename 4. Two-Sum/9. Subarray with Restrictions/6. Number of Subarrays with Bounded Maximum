@@ -1,0 +1,39 @@
+Given an integer array nums and two integers left and right, return the number of contiguous non-empty subarrays such that the value of the maximum array element in that subarray is in the range [left, right].
+
+The test cases are generated so that the answer will fit in a 32-bit integer.
+
+
+
+class Solution {
+public:
+    // this fun will cnt subarray with max  > k
+    
+    int helper(vector<int>& nums, int k) {
+        
+        long long s = 0, i = 0;
+        
+        while(i < nums.size())
+        {
+            if(nums[i] > k)
+            {
+                i++;
+                continue;
+            }
+            
+            long long cnt = 0;
+            while(i < nums.size() && nums[i] <= k)
+            {
+                i++;
+                cnt++;
+            }
+            
+            s += (cnt*(cnt+1))/2;
+        }
+        
+        return (int)s;
+    }
+    
+    int numSubarrayBoundedMax(vector<int>& nums, int left, int right) {
+        return helper(nums, right) - helper(nums, left-1);
+    }
+};
