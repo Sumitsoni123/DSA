@@ -1,0 +1,29 @@
+1. You are given a string.
+2. You have to find the count of valid substrings of the given string.
+3. Valid substring is defined as a substring that has all unique characters.
+
+
+
+
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        unordered_map<char, int> frq;
+        
+        int left = 0, cnt = 0;
+        for(int right = 0; right < s.length(); right++)
+        {
+            frq[s[right]]++;
+            
+            // invalid state 
+            while(frq[s[right]] > 1)
+            {
+                frq[s[left++]]--;
+            }
+            
+            cnt += right-left+1;
+        }
+        
+        return cnt;
+    }
+};
