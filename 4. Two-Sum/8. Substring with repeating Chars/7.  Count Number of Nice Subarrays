@@ -1,0 +1,36 @@
+Given an array of integers nums and an integer k. A continuous subarray is called nice if there are k odd numbers on it.
+
+Return the number of nice sub-arrays.
+
+
+
+class Solution {
+public:
+    
+    int helper(vector<int>& nums, int k) {
+        int cnt = 0, left = 0, odd = 0;
+        
+        for(int right = 0; right < nums.size(); right++)
+        {
+            if(nums[right]%2 != 0)
+                odd++;
+            
+            while(odd > k)
+            {
+                if(nums[left]%2 != 0)
+                    odd--;
+                
+                left++;
+            }
+            
+            cnt += (right - left + 1);
+        }
+        
+        return cnt;
+    }
+    
+    int numberOfSubarrays(vector<int>& nums, int k) {
+        
+        return helper(nums, k) - helper(nums, k-1);
+    }
+};
