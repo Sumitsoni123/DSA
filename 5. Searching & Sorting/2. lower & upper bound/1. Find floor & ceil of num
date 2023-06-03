@@ -1,0 +1,58 @@
+Given sorted array of integers . Find floor and ceiling of given target number.
+
+
+#include<iostream>
+using namespace std;
+
+int floorValue(int arr[], int tagret) {
+    int l = 0, r = arr.size()-1;
+    
+    while(l<=r)
+    {
+        int mid = (l+r)/2;
+        
+        if(target <= arr[mid])
+            r = mid-1;
+        else 
+            l = mid+1;
+    }
+    
+    return arr[r];
+}
+
+
+int ceilValue(int arr[], int tagret) {
+    int l = 0, r = arr.size()-1;
+    
+    while(l<=r)
+    {
+        int mid = (l+r)/2;
+        
+        if(target >= arr[mid])
+            l = mid+1;
+        else 
+            r = mid-1;
+    }
+    
+    return arr[l];
+}
+
+
+
+int main() {
+    
+    int n;
+    cin>>n;
+    int* arr = new int[n];
+    for(int i = 0 ; i < n; i++){
+        cin>>arr[i];
+    }
+    int data;
+    cin>>data;
+    
+    // write your code here
+    cout<<floorValue(arr, data)<<endl;
+    cout<<ceilValue(arr, data)<<endl;
+    
+    return 0;
+}
