@@ -1,0 +1,28 @@
+You are given 2 numbers (n , m); the task is to find n√m (nth root of m).
+
+
+
+class Solution{
+	public:
+	int NthRoot(int n, int m)
+	{
+	    // Code here.
+	    int l = 0, r = m, ans;
+	    
+	    while(l <= r)
+	    {
+	        int mid = l+(r-l)/2;
+	        long long int mul = pow(mid, n);
+	        if(mul == m)
+	            return mid;
+	            
+	        else if(mul > m || mul <0)
+	            r = mid-1;
+	        else 
+	            l = mid +1;
+	            
+	    }
+	    
+	    return -1;
+	}  
+};
