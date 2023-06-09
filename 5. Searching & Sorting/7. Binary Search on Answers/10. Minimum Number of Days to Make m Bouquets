@@ -1,0 +1,57 @@
+You are given an integer array bloomDay, an integer m and an integer k.
+
+You want to make m bouquets. To make a bouquet, you need to use k adjacent flowers from the garden.
+
+The garden consists of n flowers, the ith flower will bloom in the bloomDay[i] and then can be used in exactly one bouquet.
+
+Return the minimum number of days you need to wait to be able to make m bouquets from the garden. If it is impossible to make m bouquets return -1.
+
+
+
+class Solution {
+public:
+    
+    bool isPossible(vector<int> &arr, int m, int k, int days)
+    {
+        int cntFlower = 0;
+        int adjCnt = 0;
+        for(auto day : arr)
+        {
+            if(day <= days)
+            {
+                adjCnt++;
+                if(adjCnt == k)
+                {
+                    cntFlower++;
+                    adjCnt = 0;
+                }    
+            }
+            else
+                adjCnt = 0;
+        }
+        return cntFlower >=m;
+    }
+    
+    int minDays(vector<int>& arr, int m, int k) {
+        
+        if(m*k > arr.size())
+            return -1;
+        
+        int l = 0, r = *max_element(arr.begin(), arr.end());
+        int ans = -1;
+        while(l <= r)
+        {
+            int days = l+(r-l)/2;
+            
+            if(isPossible(arr, m, k, days))
+            {
+                ans = days;
+                r = days - 1;
+            }
+            else
+                l = days + 1;
+        }
+        
+        return ans;
+    }
+};
