@@ -1,0 +1,53 @@
+You have N books, each with Ai number of pages. M students need to be allocated contiguous books, with each student getting at least one book. Out of all the permutations, the goal is to find the permutation where the student with the most pages allocated to him gets the minimum number of pages, out of all possible permutations.
+
+Note: Return -1 if a valid assignment is not possible, and allotment should be in contiguous order (see the explanation for better understanding).
+
+
+
+
+class Solution 
+{
+    public:
+    bool isPossible(int arr[], int n, int m, int mid)
+    {
+        int sum = 0;
+        int studCnt = 1;
+        for(int i=0; i<n; i++)
+        {
+            if(sum + arr[i] <= mid)
+                sum += arr[i];
+            else    
+            {
+                studCnt++;
+                if(studCnt > m || arr[i] > mid)
+                    return false;
+                sum = arr[i];    
+            }    
+        }
+        return true;
+    }
+    
+    
+    int findPages(int arr[], int n, int m) 
+    {
+        int sum = 0;
+        for(int i=0; i<n; i++)
+            sum += arr[i];
+            
+        int l = 0, r = sum, ans;
+        while(l <= r)
+        {
+            int mid = l+(r-l)/2;
+            
+            if(isPossible(arr, n, m, mid))
+            {
+                ans = mid;
+                r = mid-1;
+            }
+            else
+                l = mid+1;
+        }
+        
+        return ans;
+    }
+};
