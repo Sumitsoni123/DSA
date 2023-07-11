@@ -1,0 +1,16 @@
+public static void sort01(int[] arr){
+      // 0 to j-1  ->  All Zeroes
+    // j to i-1  ->  All Ones's
+    // i to arr.length-1  ->  All unknowns
+    
+    int i = 0, j = 0;
+    while (i < arr.length) {
+      if (arr[i] == 0) {
+        swap(arr, i, j);
+        i++;
+        j++;
+      }else {
+        i++;
+      }
+    }
+  }
