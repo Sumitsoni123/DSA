@@ -1,0 +1,27 @@
+class Solution {
+public:
+    vector<string> topKFrequent(vector<string>& words, int k) {
+        
+        map<string, int> freq;
+        for(auto &v: words)
+            freq[v]++;
+        
+        map<int, vector<string>> map_freq;
+        
+        for(auto & v: freq)
+            map_freq[v.second].push_back(v.first);
+        
+        
+        vector<string> res;
+        for(auto it = map_freq.rbegin(); it!= map_freq.rend(); it++)
+        {
+            for(int i=0; k>0 && i<it->second.size(); i++)
+            {
+                res.push_back(it->second[i]);
+                k--;
+            }
+        }
+        
+        return res;
+    }
+};
