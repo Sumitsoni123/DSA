@@ -1,0 +1,74 @@
+Given an array arr[] of size N of non negative integers. We can perform a swap operation on any two adjacent elements in the array. The task is to find the minimum number of swaps needed to sort the array in non - decreasing order.
+
+
+
+//User function template for C++
+class Solution{
+public:	
+		
+	int merge(int arr[], int l, int mid, int r)
+    {
+        int n1 = mid-l+1;
+        int n2 = r - mid;
+        int left[n1], right[n2];
+        
+        for(int i = 0; i < n1; i++)
+        {
+            left[i] = arr[l + i];
+        }
+        
+        for(int i = 0; i < n2; i++)
+        {
+            right[i] = arr[mid + i + 1];
+        }
+        
+        int i = 0, j = 0, k = l;
+        int res = 0;
+        
+        while(i < n1 && j < n2)
+        {
+            if(left[i] <= right[j])
+            {
+                arr[k++] = left[i++];
+            }
+            else
+            {
+                arr[k++] = right[j++];
+                res += (n1 - i);
+            }
+        }
+        
+        while(i < n1)
+        {
+            arr[k++] = left[i++];
+        }
+        
+        while(j < n2)
+        {
+            arr[k++] = right[j++];
+        }
+        
+        return res;
+    }
+    
+    int mergeSort(int arr[], int low, int high)
+    {
+        int res = 0;
+        
+        if(low < high)
+        {
+            int mid = low + (high - low)/2;
+            
+            res += mergeSort(arr, low, mid);
+            res += mergeSort(arr, mid + 1, high);
+            
+            res += merge(arr, low, mid, high);
+        }
+        
+        return res;
+    }	
+	int countSwaps(int arr[], int n)
+	{
+	    return mergeSort(arr, 0, n-1);
+	}
+};
