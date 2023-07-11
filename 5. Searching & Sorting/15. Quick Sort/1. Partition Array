@@ -1,0 +1,16 @@
+public static void partition(int[] arr, int pivot) {
+    // 0 to j-1  ->  all elements are equal and smaller than pivot 
+    // j to i-1  ->  all elements are greater than pivot
+    // i to arr.length-1  ->  unknown elements
+    
+    int i = 0, j = 0;
+    while (i < arr.length) {
+      if (arr[i] <= pivot) {
+        swap(arr, i, j);
+        i++;
+        j++;
+      }else {
+        i++;
+      }
+    }
+  }
