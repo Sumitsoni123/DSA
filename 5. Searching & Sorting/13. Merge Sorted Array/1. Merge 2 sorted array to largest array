@@ -1,0 +1,56 @@
+You are given two integer arrays nums1 and nums2, sorted in non-decreasing order, and two integers m and n, representing the number of elements in nums1 and nums2 respectively.
+
+Merge nums1 and nums2 into a single array sorted in non-decreasing order.
+
+The final sorted array should not be returned by the function, but instead be stored inside the array nums1. To accommodate this, nums1 has a length of m + n, where the first m elements denote the elements that should be merged, and the last n elements are set to 0 and should be ignored. nums2 has a length of n.
+
+
+
+
+class Solution {
+public:
+    void merge(vector<int>& nums1, int m, vector<int>& nums2, int n)
+    {        
+        for(int i=m; i<m+n; i++)
+            nums1[i] = nums2[i-m];
+        
+        // using insertion sort technique 
+        // space = k  time = O(n+m +m^2)
+        
+        
+//         for(int j=m; j<m+n; j++)
+//         {
+//             int i;
+//             for(i=j-1; i>=0; i--)
+//             {
+//                 if(nums1[i] > nums1[i+1])
+//                     swap(nums1[i], nums1[i+1]);
+//                 else
+//                     break;
+//             }
+           
+//         }
+        
+        
+        // using shell sort technique
+        // space = k  time = O[(n+m)log(m+n)]
+        
+        int size = ceil((n+m)/2);
+        for(int gap = size; gap>=1; gap/=2)
+        {
+            for(int i=0, j=gap; j<m+n; i++,j++)
+            {
+                if(nums1[i] > nums1[j])
+                    swap(nums1[i], nums1[j]);
+            }
+        }
+        
+        
+        // gap  == 1 is must to sort it properly
+        for(int i=0, j=1; j<m+n; i++,j++)
+            {
+                if(nums1[i] > nums1[j])
+                    swap(nums1[i], nums1[j]);
+            }
+    }
+};
