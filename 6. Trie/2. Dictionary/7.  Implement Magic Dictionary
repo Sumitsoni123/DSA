@@ -1,0 +1,82 @@
+Design a data structure that is initialized with a list of different words. Provided a string, you should determine if you can change exactly one character in this string to match any word in the data structure.
+
+Implement the MagicDictionary class:
+
+MagicDictionary() Initializes the object.
+void buildDict(String[] dictionary) Sets the data structure with an array of distinct strings dictionary.
+bool search(String searchWord) Returns true if you can change exactly one character in searchWord to match any string in the data structure, otherwise returns false.
+
+
+
+class TrieNode {
+    public: 
+        TrieNode* child[26];
+        bool isEnd;
+
+        TrieNode() {
+            for(auto &ch: child) 
+                ch = NULL;
+            isEnd = false;    
+        }
+        ~TrieNode() {
+            for(auto &ch: child) {
+                if(ch != NULL)
+                    delete ch;
+            }
+        }
+};
+
+class MagicDictionary {
+    TrieNode* root;
+public:
+    MagicDictionary() {
+        root = new TrieNode();
+    }
+    ~MagicDictionary() {
+        delete root;
+    }
+    
+    void buildDict(vector<string> dictionary) {
+        for(string &word: dictionary) {
+            TrieNode* curr = root;
+
+            for(int i=0; i<word.length(); i++) {
+                int idx = word[i] - 'a';
+
+                if(curr->child[idx] == NULL)
+                    curr->child[idx] = new TrieNode();
+
+                curr = curr->child[idx];    
+            }
+            curr->isEnd = true;
+        }
+    }
+    
+    bool searchHelper(string word, int idx, TrieNode* curr, bool flag) {
+
+        if(idx == word.length()) {
+            if(flag == true && curr->isEnd == true)
+                return true;
+            return false;    
+        }
+
+        char ch = word[idx];
+        if(curr->child[ch-'a'] != NULL && searchHelper(word, idx+1, curr->child[ch-'a'], flag))
+            return true;
+
+        if(flag == true) return false;
+
+        for(char chn = 'a'; chn <='z'; chn++) {
+            if(chn == ch) continue;
+
+            if(curr->child[chn-'a'] != NULL && searchHelper(word, idx+1, curr->child[chn-'a'], true))
+                return true;
+        }
+
+        return false;    
+    }
+
+    bool search(string searchWord) {
+        return searchHelper(searchWord, 0, root, false);
+    }
+};
