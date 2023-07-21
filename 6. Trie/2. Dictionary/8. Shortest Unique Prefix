@@ -1,0 +1,70 @@
+Find shortest unique prefix to represent each word in the list.
+
+
+
+public class Solution {
+
+    public static class Node
+    {    
+        private Node[] children = new Node[26];   // null stoted by default
+        //public boolean isEnd = false;
+        public int prefCount = 0;
+        public int end = 0;
+        
+        public boolean contains(char ch) {
+            return (children[ch-'a'] != null);
+        }
+        
+        public Node get(char ch) {         // getter
+            return children[ch-'a'];
+        }
+        
+        public void set(char ch) {         // setter
+            children[ch-'a'] = new Node();
+        }
+        
+        
+    }
+
+    public void insert(String word) {
+        Node curr = root;
+        curr.prefCount++;
+        for(int i=0; i<word.length(); i++)
+        {
+            char ch = word.charAt(i);
+            if(curr.contains(ch) == false)
+                curr.set(ch);
+            
+            curr = curr.get(ch);
+            curr.prefCount++;
+        }
+        
+        curr.end++;
+    }
+
+    public String search(String word){
+        Node curr = root;
+        for(int i=0; i<word.length(); i++)
+        {
+            char ch = word.charAt(i);
+            if(curr.prefCount == 1)
+                return word.substring(0, i);
+            
+            curr = curr.get(ch);
+        }
+        
+        return word;
+    }
+
+    Node root;
+    public String[] prefix(String[] word) {
+        root = new Node();
+        for(String str: word)
+            insert(str);
+
+        String[] ans = new String[word.length];
+        for(int i=0; i<ans.length; i++)
+            ans[i] = search(word[i]);    
+
+        return ans;    
+    }
