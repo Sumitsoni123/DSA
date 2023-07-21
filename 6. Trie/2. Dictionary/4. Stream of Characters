@@ -1,0 +1,73 @@
+Design an algorithm that accepts a stream of characters and checks if a suffix of these characters is a string of a given array of strings words.
+
+For example, if words = ["abc", "xyz"] and the stream added the four characters (one by one) 'a', 'x', 'y', and 'z', your algorithm should detect that the suffix "xyz" of the characters "axyz" matches "xyz" from words.
+
+Implement the StreamChecker class:
+
+StreamChecker(String[] words) Initializes the object with the strings array words.
+boolean query(char letter) Accepts a new character from the stream and returns true if any non-empty suffix from the stream forms a word that is in words.
+
+
+
+class TrieNode {
+    public: 
+        TrieNode* child[26];
+        bool isEnd;
+        TrieNode() {
+            for(auto &ch: child)
+                ch = NULL;
+            isEnd = false;    
+        }
+        ~TrieNode() {
+            for(auto &ch: child) {
+                if(ch != NULL)
+                    delete ch;
+            }
+        }
+};
+class StreamChecker {
+    TrieNode* root;
+public:
+
+    void insert(string &s, TrieNode *root) {
+        TrieNode *cur = root;
+        int n = s.size();
+        for(int i=n-1; i>=0; --i) {
+            char ch = s[i];
+            if(!cur->child[ch-'a']) cur->child[ch-'a'] = new TrieNode();
+            cur=cur->child[ch-'a'];
+        }
+        cur->isEnd = true;
+    }
+
+    
+    // searching prefix of string s 
+    bool search(string &s, TrieNode *root) {
+        TrieNode *cur = root;
+        int n=s.size();
+        for(int i=n-1; i>=(0; i--) {
+            char ch = s[i];
+            if(!cur->child[ch-'a']) return false;
+            cur=cur->child[ch-'a'];
+            if(cur->isEnd) return true;
+        }
+        return false;
+    }
+    string qry = "";
+    StreamChecker(vector<string>& words) {
+        root = new TrieNode();
+
+        for(auto &word: words) {
+            insert(word, root); 
+        }       
+    }
+
+    ~StreamChecker() { 
+        delete root;
+    }
+
+    bool query(char letter) {
+        qry.push_back(letter);
+        return search(qry, root);
+    }
+};
