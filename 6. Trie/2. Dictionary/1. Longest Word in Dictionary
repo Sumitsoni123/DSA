@@ -1,0 +1,69 @@
+Given an array of strings words representing an English Dictionary, return the longest word in words that can be built one character at a time by other words in words.
+
+If there is more than one possible answer, return the longest word with the smallest lexicographical order. If there is no answer, return the empty string.
+
+Note that the word should be built from left to right with each additional character being added to the end of a previous word. 
+
+
+
+class TrieNode {
+public:
+    TrieNode *child[26];
+    bool isWord;
+
+    TrieNode() {
+        isWord = false;
+        for (auto &a : child) a = NULL;
+    }
+};
+
+class Solution {
+    TrieNode* root;
+public:
+
+    void insert(string &word) {
+        
+        TrieNode *curr = root;
+
+        for(int i=0; i<word.length(); i++) {
+            int index = word[i] - 'a';
+
+            if(curr->child[index] == NULL) {
+                curr->child[index] = new TrieNode();
+            }
+            curr = curr->child[index];   
+        }
+        curr->isWord = true;
+    }
+
+     bool wordValid(string word) {
+        TrieNode *curr = root;
+        for(auto ch: word) {
+            int index = ch - 'a';
+            curr = curr->child[index];
+            if(!curr->isWord) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    string longestWord(vector<string>& words) {  
+        root = new TrieNode();
+
+        for(auto str: words)
+            insert(str);
+
+        string ans = "";
+        for(auto word: words) {
+            if(wordValid(word)) {
+                if(word.length() > ans.length())
+                    ans = word;
+                else if(word.length() == ans.length() && word < ans)
+                    ans = word;    
+            }
+        }
+
+        return ans;
+    }
+};
