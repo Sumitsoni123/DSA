@@ -1,0 +1,108 @@
+Design a map that allows you to do the following:
+
+Maps a string key to a given value.
+Returns the sum of the values that have a key with a prefix equal to a given string.
+Implement the MapSum class:
+
+MapSum() Initializes the MapSum object.
+void insert(String key, int val) Inserts the key-val pair into the map. If the key already existed, the original key-value pair will be overridden to the new one.
+int sum(string prefix) Returns the sum of all the pairs' value whose key starts with the prefix.
+
+
+
+struct TrieNode
+{
+	TrieNode *childern[26];
+    int value;
+	int prefixCount;
+
+	TrieNode()
+	{
+		for (int i = 0; i < 26; i++)
+			childern[i] = NULL;
+		
+		prefixCount = 0;
+        value = 0;
+	}
+	~TrieNode()
+    {
+        for (int i = 0; i < 26; i++)
+        {
+            if (childern[i] != NULL)
+            {
+                delete childern[i];
+            }
+        }
+    }
+};
+
+class MapSum {
+public:
+    // Declare a variable root that denotes the root of the Trie.
+	TrieNode *root;
+
+	// Initialize the Trie.
+	MapSum()
+	{
+		root = new TrieNode();
+	}
+	~MapSum()
+	{
+		delete root;
+	}
+    
+    int search(string &word)
+	{
+		TrieNode *curr = root;
+
+		// Iterating through the string word.
+		for (int i = 0; i < word.length(); i++)
+		{
+			int index = word[i] - 'a';
+
+			if (curr->childern[index] == NULL)
+				return 0;
+			
+			curr = curr->childern[index];
+		}
+		return curr->value;
+	}
+
+    void insert(string word, int val) {
+        int oldValue = search(word);
+        TrieNode *curr = root;
+
+		// Iterating through the string word.
+		for (int i = 0; i < word.length(); i++)
+		{
+            curr->prefixCount += (val - oldValue);
+			int index = word[i] - 'a';
+
+			if (curr->childern[index] == NULL)
+			{
+				curr->childern[index] = new TrieNode();
+			}
+			curr = curr->childern[index];
+			
+		}
+		curr->prefixCount+= (val - oldValue);
+        curr->value = val; 
+    }
+    
+    int sum(string prefix) {
+        TrieNode *curr = root;
+
+        // Iterating through the string word.
+        for (int i = 0; i < prefix.length(); i++)
+		{
+			int index = prefix[i] - 'a';
+
+			if (curr->childern[index] == NULL)
+				curr->childern[index] = new TrieNode();
+			
+			curr = curr->childern[index];
+		}
+
+        return curr->prefixCount;
+    }
+};
