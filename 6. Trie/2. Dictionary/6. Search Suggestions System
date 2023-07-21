@@ -1,0 +1,83 @@
+You are given an array of strings products and a string searchWord.
+
+Design a system that suggests at most three product names from products after each character of searchWord is typed. Suggested products should have common prefix with searchWord. If there are more than three products with a common prefix return the three lexicographically minimums products.
+
+Return a list of lists of the suggested products after each character of searchWord is typed.
+
+
+
+class TrieNode {
+    public:
+        TrieNode* child[26];
+        bool isEnd;
+        TrieNode() {
+            for(auto &ch: child)    ch = NULL;
+            isEnd = false;
+        }
+        ~TrieNode() {
+            for(auto &ch: child) {
+                if(ch != NULL)
+                    delete ch;
+            }        
+        }
+};
+
+class Solution {
+public:
+
+    void insert(TrieNode* node, string word) {
+        for(int i=0; i<word.length(); i++) {
+            int idx = word[i]-'a';
+
+            if(node->child[idx] == NULL)
+                node->child[idx] = new TrieNode();
+
+            node = node->child[idx];    
+        }
+        node->isEnd = true;
+    }
+
+    void DFS(TrieNode* node, string ssf, vector<string> &ans, int k) {
+        if(ans.size() == k) return;
+
+        if(node->isEnd == true) 
+            ans.push_back(ssf);
+
+        for(char ch='a'; ch<='z'; ch++) {
+            if(node->child[ch-'a'] != NULL) {
+                DFS(node->child[ch-'a'], ssf+ch, ans, k);
+            }
+        }    
+    }
+
+    vector<vector<string>> suggestedProducts(vector<string>& products, string searchWord) {
+        TrieNode* root = new TrieNode();
+
+        for(string &word: products) {
+            insert(root, word);
+        }
+        
+        vector<vector<string>> res;
+
+        for(int i=0; i<searchWord.length(); i++) {
+            char ch = searchWord[i];
+
+            if(root->child[ch-'a'] != NULL) {
+                root = root->child[ch-'a'];
+                vector<string> ans;
+                DFS(root, searchWord.substr(0, i+1), ans, 3);
+                res.push_back(ans);
+            }
+            else 
+                break;
+        }
+
+        if(res.size() < searchWord.size()) {
+            vector<string> temp;
+            int k = searchWord.size() - res.size();
+            while(k--)
+                res.push_back(temp);
+        }    
+        return res;
+    }
+};
