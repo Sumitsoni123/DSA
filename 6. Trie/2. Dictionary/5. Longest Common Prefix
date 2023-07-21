@@ -1,0 +1,73 @@
+Write a function to find the longest common prefix string amongst an array of strings.
+
+If there is no common prefix, return an empty string "".
+
+
+
+class TrieNode {
+    public:
+    TrieNode* children[26];
+    bool isEnd;
+
+    TrieNode() {
+        for(auto &ch: children)
+            ch = NULL;
+        isEnd = false;    
+    }
+    ~TrieNode() {
+        for(auto &ch: children) {
+            if(ch != NULL)
+                delete ch;
+        }
+    }
+
+};
+class Solution {
+    TrieNode* root;
+public:
+
+    void insert(string word) {
+        TrieNode* node = root;
+
+        for(auto &ch: word) {
+            int idx = ch - 'a';
+
+            if(node->children[idx] == NULL)
+                node->children[idx] = new TrieNode();
+
+            node = node->children[idx];    
+        }
+        node->isEnd = true;
+    }
+
+    string res = "";
+    void DFS(TrieNode* curr, string ans) {
+        int cnt = 0;
+
+        if(ans.length() > res.length())
+            res = ans;
+
+        if(curr->isEnd) return;     // to handle if word ends
+
+        char child = 'a';
+        for(int i=0; i<26; i++) {
+            if(curr->children[i] != NULL) {
+                cnt++;
+                child = i + 'a';
+            }   
+        }
+        if(cnt == 1) DFS(curr->children[child-'a'], ans+child);
+        
+    }
+
+    string longestCommonPrefix(vector<string>& strs) {
+        root = new TrieNode();
+
+        for(auto word: strs) 
+            insert(word);
+
+        DFS(root, "");
+
+        return res;
+    }
+};
