@@ -1,0 +1,65 @@
+Given an integer array nums, return the maximum result of nums[i] XOR nums[j], where 0 <= i <= j < n.
+
+
+
+class TrieNode {
+    public:
+        TrieNode* left = NULL;
+        TrieNode* right = NULL;
+};
+
+class Solution {
+    TrieNode* root;
+public:    
+    void insert(TrieNode* root, int val) {
+        for (int i = 31; i >= 0; i--) {
+            int bit = val & (1 << i);
+
+            if (bit == 0) {
+                if (root->left == NULL)
+                    root->left = new TrieNode();
+                root = root->left;
+            } else {
+                if (root->right == NULL)
+                    root->right = new TrieNode();
+                root = root->right;
+            }
+        }
+    }
+
+    int search(TrieNode* root, int val) {
+        int maxXor = 0;
+        for (int i = 31; i >= 0; i--) {
+            int bit = val & (1 << i);
+
+            if (bit == 0) {
+                if (root->right != NULL) {
+                    root = root->right;
+                    maxXor = maxXor | (1 << i);
+                } else {
+                    root = root->left;
+                }
+            } else {
+                if (root->left != NULL) {
+                    root = root->left;
+                    maxXor = maxXor | (1 << i);
+                } else {
+                    root = root->right;
+                }
+            }
+        }
+        return maxXor;
+    }
+
+    int findMaximumXOR(vector<int>& nums) {
+        root = new TrieNode();
+        int ans = 0;
+        for (int &val : nums) {
+            insert(root, val);
+            ans = max(ans, search(root, val));
+        }
+
+        return ans;
+    }
+
+};
