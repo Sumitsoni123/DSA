@@ -1,0 +1,129 @@
+class Node {
+public:
+    int data;
+    Node* next;
+
+    Node(int val) {
+        this->data = val;
+        next = nullptr;
+    }
+
+    Node(int val, Node* next) {
+        this->data = val;
+        this->next = next;
+    }
+};
+class MyLinkedList {
+public:
+    Node* head = nullptr;
+    Node* tail = nullptr;
+    int size = 0;
+
+    MyLinkedList() {}
+
+    int get(int index) {
+        if (size == 0 || index < 0 || index >= size) {
+            return -1;
+        } else {
+            Node* temp = head;
+            for (int i = 0; i < index; i++)
+                temp = temp->next;
+
+            return temp->data;
+        }
+    }
+
+    void addAtHead(int val) {
+        Node* node = new Node(val, head);
+
+        if (size == 0) {
+            head = tail = node;
+        } else {
+            head = node;
+        }
+        size++;
+    }
+
+    void addAtTail(int val) {
+        Node* node = new Node(val);
+
+        if (size == 0) {
+            head = tail = node;
+        } else {
+            tail->next = node;
+            tail = tail->next;
+        }
+
+        size++;
+    }
+
+    void addAtIndex(int index, int val) {
+        if (index < 0 || index > size) {
+            return;
+        } else if (index == 0) {
+            addAtHead(val);
+        } else if (index == size) {
+            addAtTail(val);
+        } else {
+            Node* node = new Node(val);
+            Node* temp = head;
+            for (int i = 0; i < index - 1; i++)
+                temp = temp->next;
+
+            node->next = temp->next;
+            temp->next = node;
+            size++;
+        }
+    }
+
+    void removeAtHead() {
+        if (size == 0) {
+            return;
+        } else if (size == 1) {
+            head = tail = nullptr;
+            size--;
+        } else {
+            head = head->next;
+            size--;
+        }
+    }
+
+    void removeAtTail() {
+        if (size == 0) {
+            return;
+        } else if (size == 1) {
+            head = tail = nullptr;
+            size--;
+        } else {
+            Node* ptr = head;
+            while (ptr->next != tail) 
+                ptr = ptr->next;
+
+            delete tail; // Free memory for the last node
+            tail = ptr;
+            tail->next = nullptr;
+            size--;
+        }
+    }
+
+    void deleteAtIndex(int index) {
+        if (size == 0 || index < 0 || index >= size) {
+            return;
+        } else if (index == 0) {
+            // Remove at first
+            removeAtHead();
+        } else if (index == size - 1) {
+            // Remove at last
+            removeAtTail();
+        } else {
+            Node* temp = head;
+            for (int i = 0; i < index - 1; i++)
+                temp = temp->next;
+
+            Node* nodeToDelete = temp->next;
+            temp->next = temp->next->next;
+            delete nodeToDelete; // Free memory for the node being deleted
+            size--;
+        }
+    }
+};
