@@ -1,0 +1,66 @@
+#include <iostream>
+using namespace std;
+
+class Node {
+public:
+    int data;
+    Node* next;
+
+    Node(int data) : data(data), next(nullptr) {}
+};
+
+static Node* left = nullptr;
+
+bool isPalindrome(Node* head) {
+    if (head == nullptr)
+        return true;
+
+    bool ans = isPalindrome(head->next);
+    if (ans == false)
+        return false;
+    if (left->data != head->data)
+        return false;
+
+    left = left->next;
+    return true;
+}
+
+static Node* head1 = nullptr;
+
+Node* insert(Node* tail, int data) {
+    if (tail == nullptr) {
+        return new Node(data);
+    }
+
+    Node* nn = new Node(data);
+    tail->next = nn;
+    return nn;
+}
+
+void display(Node* head) {
+    for (Node* node = head; node != nullptr; node = node->next) {
+        cout << node->data << " ";
+    }
+}
+
+int main() {
+    int n1, a1;
+    cin >> n1 >> a1;
+
+    Node* tail;
+    head1 = tail = insert(nullptr, a1);
+
+    for (int i = 1; i < n1; i++) {
+        int a;
+        cin >> a;
+        tail = insert(tail, a);
+    }
+
+    if (isPalindrome(head1)) {
+        cout << "1" << endl;
+    } else {
+        cout << "0" << endl;
+    }
+
+    return 0;
+}
