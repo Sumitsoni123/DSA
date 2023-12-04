@@ -1,0 +1,116 @@
+#include <iostream>
+using namespace std;
+
+class ListNode
+{
+public:
+    int val = 0;
+    ListNode *next = nullptr;
+
+    ListNode(int val)
+    {
+        this->val = val;
+    }
+};
+
+ListNode* getMid(ListNode* head) 
+{
+    if(head == nullptr || head->next == nullptr)
+        return head;
+        
+    ListNode* fast = head;
+    ListNode* slow = head;
+    
+    while(fast->next != nullptr && fast->next->next != nullptr)
+    {
+        fast = fast->next->next;
+        slow = slow->next;
+    }
+    
+    return slow;
+}
+
+ListNode *reverseLL(ListNode* head) 
+{
+    if(head == nullptr || head->next == nullptr)
+        return head;
+        
+    ListNode* prev = nullptr;
+    ListNode* curr = head;
+    ListNode* currNext = nullptr;
+    
+    while(curr != nullptr)
+    {
+        currNext = curr->next;
+        
+        curr->next = prev;
+        prev = curr;
+        curr = currNext;
+    }
+    
+    return prev;
+}
+
+void fold(ListNode *head)
+{
+    if(head == nullptr || head->next == nullptr)
+        return;
+        
+    ListNode* mid = getMid(head);
+    ListNode* mhead = mid->next;
+    mid->next = nullptr;
+    
+    mhead = reverseLL(mhead);
+    
+    ListNode* h1 = head;
+    ListNode* h2 = mhead;
+    ListNode* t1 = nullptr;
+    ListNode* t2 = nullptr;
+    
+    while(h2 != nullptr)
+    {
+        // backup
+        t1 = h1->next;
+        t2 = h2->next;
+        
+        // links
+        h1->next = h2;
+        h2->next = t1;
+        
+        // move
+        h1 = t1;
+        h2 = t2;
+    }
+}
+
+void printList(ListNode *node)
+{
+    ListNode *curr = node;
+    while (curr != nullptr)
+    {
+        cout << curr->val << " ";
+        curr = curr->next;
+    }
+    cout << endl;
+}
+
+int main()
+{
+    int n;
+    cin >> n;
+    ListNode *dummy = new ListNode(-1);
+    ListNode *prev = dummy;
+    while (n-- > 0)
+    {
+        int val;
+        cin >> val;
+        prev->next = new ListNode(val);
+        prev = prev->next;
+    }
+
+    ListNode *head = dummy->next;
+    fold(head);
+    printList(head);
+
+    return 0;
+}
