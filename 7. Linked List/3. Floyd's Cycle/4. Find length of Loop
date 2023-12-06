@@ -1,0 +1,42 @@
+Given a linked list of size N. The task is to complete the function countNodesinLoop() that checks whether a given Linked List contains a loop or not and if the loop is present then return the count of nodes in a loop or else return 0. C is the position of the node to which the last node is connected. If it is 0 then no loop.
+
+
+
+/*
+struct Node {
+    int data;
+    struct Node *next;
+    Node(int x) {
+        data = x;
+        next = NULL;
+    }
+};
+
+*/
+
+//Function to find the length of a loop in the linked list.
+int countNodesinLoop(struct Node *head)
+{
+    // Code here
+    Node* f = head, *s = head;
+    while(f != nullptr && f->next != nullptr)
+    {
+        f = f->next->next;
+        s = s->next;
+        
+        if(s  == f) break;
+    }
+    
+    if(f == nullptr || f->next == nullptr)
+        return 0;
+        
+    s = s->next;
+    int d = 1;
+    while(s != f)
+    {
+        d++;
+        s = s->next;
+    }
+    
+    return d;
+}
