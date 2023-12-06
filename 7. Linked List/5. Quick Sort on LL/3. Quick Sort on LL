@@ -1,0 +1,81 @@
+Given the head of a linked list, return the list after sorting it in ascending order.
+
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+     ListNode* partition(ListNode* head, int x) {
+        ListNode* left = new ListNode(-1);
+        ListNode* ltail = left;
+
+        ListNode* right = new ListNode(-1);
+        ListNode* rtail = right;
+
+        while (head != nullptr) {
+            if (head->val < x) {
+                ltail->next = head;
+                ltail = head;
+                head = head->next;
+            } else {
+                rtail->next = head;
+                rtail = head;
+                head = head->next;
+            }
+        }
+
+        ltail->next = nullptr;
+        rtail->next = nullptr;
+
+        return left->next;
+    }
+
+    ListNode* getTail(ListNode* curr) {
+        if (curr == nullptr) return nullptr;
+        while (curr->next != nullptr)
+            curr = curr->next;
+        return curr;
+    }
+
+    void randomize(ListNode* head) {
+        int size = 0;
+        ListNode* curr = head;
+        while (curr != nullptr) {
+            size++;
+            curr = curr->next;
+        }
+
+        int randNum = rand() % size;
+        curr = head;
+        while (randNum-- > 0)
+            curr = curr->next;
+
+        int temp = curr->val;
+        curr->val = head->val;
+        head->val = temp;
+    }
+
+    ListNode* sortList(ListNode* head) {
+        if (head == nullptr || head->next == nullptr) return head;
+
+        randomize(head);
+        ListNode* left = sortList(partition(head, head->val));
+        ListNode* right = sortList(head->next);
+        head->next = right;
+
+        if (left == nullptr)
+            return head;
+
+        ListNode* tail = getTail(left);
+        tail->next = head;
+        return left;
+    }
+};
