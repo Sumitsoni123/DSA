@@ -1,0 +1,53 @@
+1. You are given a string exp representing an expression.
+2. You are required to check if the expression is balanced i.e. closing brackets and opening brackets match up well.
+
+e.g.
+[(a + b) + {(c + d) * (e / f)}] -> true
+[(a + b) + {(c + d) * (e / f)]} -> false
+[(a + b) + {(c + d) * (e / f)} -> false
+([(a + b) + {(c + d) * (e / f)}] -> false
+
+
+#include <iostream>
+#include <stack>
+#include <string>
+
+int main() {
+    std::string str;
+    std::getline(std::cin, str);
+
+    std::stack<char> stk;
+
+    for (int i = 0; i < str.length(); i++) {
+        char ch = str[i];
+
+        if (ch == '{' || ch == '[' || ch == '(')
+            stk.push(ch);
+        else if (ch == '}') {
+            if (!stk.empty() && stk.top() == '{')
+                stk.pop();
+            else {
+                std::cout << "false" << std::endl;
+                return 0;
+            }
+        } else if (ch == ']') {
+            if (!stk.empty() && stk.top() == '[')
+                stk.pop();
+            else {
+                std::cout << "false" << std::endl;
+                return 0;
+            }
+        } else if (ch == ')') {
+            if (!stk.empty() && stk.top() == '(')
+                stk.pop();
+            else {
+                std::cout << "false" << std::endl;
+                return 0;
+            }
+        }
+    }
+
+    std::cout << (stk.empty() ? "true" : "false") << std::endl;
+
+    return 0;
+}
