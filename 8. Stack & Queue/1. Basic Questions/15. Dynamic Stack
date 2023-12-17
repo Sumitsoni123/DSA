@@ -1,0 +1,112 @@
+1. You are given the code of our CustomStack class which mimics the java.util.Stack class.
+2. Here is the list of functions that are written in the class...
+    2.1. push -> Accepts new data if there is space available in the underlying array or 
+     print "Stack overflow" otherwise
+     2.2. pop -> Removes and returns last data if available or print "Stack underflow" 
+     otherwise and returns -1
+     2.3. top -> Return last data if available or print "Stack underflow" otherwise and 
+      returns -1
+     2.4. size -> Returns the number of elements available in the stack
+     2.5. display -> Print the elements of stack in LIFO manner (space-separated) 
+     ending with a line-break.
+3. Input and Output are managed for you.
+4. You are required to change the body of push function to accept the element even when the data array is completely full. 
+
+
+
+#include <iostream>
+#include <vector>
+
+class CustomStack {
+private:
+    int* data;
+    int tos;
+    int capacity;
+
+public:
+    CustomStack(int cap) {
+        data = new int[cap];
+        tos = -1;
+        capacity = cap;
+    }
+
+    ~CustomStack() {
+        delete[] data;
+    }
+
+    int size() {
+        return tos + 1;
+    }
+
+    void display() {
+        for (int i = tos; i >= 0; i--) {
+            std::cout << data[i] << " ";
+        }
+        std::cout << std::endl;
+    }
+
+    void push(int val) {
+        if (tos == capacity - 1) {
+            int* temp = new int[2 * capacity];
+            for (int i = 0; i < capacity; i++)
+                temp[i] = data[i];
+
+            temp[capacity] = val;
+            capacity *= 2;
+            delete[] data;
+            data = temp;
+        } else {
+            data[++tos] = val;
+        }
+    }
+
+    int pop() {
+        if (tos == -1) {
+            std::cout << "Stack underflow" << std::endl;
+            return -1;
+        } else {
+            return data[tos--];
+        }
+    }
+
+    int top() {
+        if (tos == -1) {
+            std::cout << "Stack underflow" << std::endl;
+            return -1;
+        } else {
+            return data[tos];
+        }
+    }
+};
+
+int main() {
+    int n;
+    std::cin >> n;
+    CustomStack st(n);
+
+    std::string str;
+    std::getline(std::cin.ignore(), str);
+    while (str != "quit") {
+        if (str.find("push") == 0) {
+            int val = std::stoi(str.substr(5));
+            st.push(val);
+        } else if (str == "pop") {
+            int val = st.pop();
+            if (val != -1) {
+                std::cout << val << std::endl;
+            }
+        } else if (str == "top") {
+            int val = st.top();
+            if (val != -1) {
+                std::cout << val << std::endl;
+            }
+        } else if (str == "size") {
+            std::cout << st.size() << std::endl;
+        } else if (str == "display") {
+            st.display();
+        }
+        std::getline(std::cin, str);
+    }
+
+    return 0;
+}
