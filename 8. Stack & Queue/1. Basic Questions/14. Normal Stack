@@ -1,0 +1,102 @@
+1. You are required to complete the code of our CustomStack class. The class should mimic the behaviour of java.util.Stack class and implement LIFO semantic.
+2. Here is the list of functions that you are supposed to complete
+   2.1. push -> Should accept new data if there is space available in the underlying 
+   array or print "Stack overflow" otherwise.
+   2.2. pop -> Should remove and return last data if available or print "Stack 
+   underflow" otherwise and return -1.
+   2.3. top -> Should return last data if available or print "Stack underflow" 
+   otherwise and return -1.
+   2.4. size -> Should return the number of elements available in the stack.
+   2.5. display -> Should print the elements of stack in LIFO manner (space- 
+   separated) ending with a line-break.
+3. Input and Output is managed for you.
+
+
+#include <iostream>
+#include <vector>
+
+class CustomStack {
+private:
+    std::vector<int> data;
+    int top;
+    int size;
+
+public:
+    CustomStack(int cap) {
+        data.resize(cap);
+        top = -1;
+        size = 0;
+    }
+
+    int getSize() {
+        return size;
+    }
+
+    void display() {
+        for (int i = top; i >= 0; i--)
+            std::cout << data[i] << " ";
+
+        std::cout << std::endl;
+    }
+
+    void push(int val) {
+        if (top == data.size() - 1) {
+            std::cout << "Stack overflow" << std::endl;
+            return;
+        }
+        top++;
+        data[top] = val;
+        size++;
+    }
+
+    int pop() {
+        if (top == -1) {
+            std::cout << "Stack underflow" << std::endl;
+            return -1;
+        }
+        int ans = data[top];
+        top--;
+        size--;
+        return ans;
+    }
+
+    int getTop() {
+        if (top == -1) {
+            std::cout << "Stack underflow" << std::endl;
+            return -1;
+        }
+        return data[top];
+    }
+};
+
+int main() {
+    int n;
+    std::cin >> n;
+    CustomStack st(n);
+
+    std::string str;
+    while (str != "quit") {
+        if (str.find("push") == 0) {
+            int val = std::stoi(str.substr(5));
+            st.push(val);
+        } else if (str == "pop") {
+            int val = st.pop();
+            if (val != -1) {
+                std::cout << val << std::endl;
+            }
+        } else if (str == "top") {
+            int val = st.getTop();
+            if (val != -1) {
+                std::cout << val << std::endl;
+            }
+        } else if (str == "size") {
+            std::cout << st.getSize() << std::endl;
+        } else if (str == "display") {
+            st.display();
+        }
+        std::cin.ignore();  // Clear the newline character from the input buffer
+        std::getline(std::cin, str);
+    }
+
+    return 0;
+}
