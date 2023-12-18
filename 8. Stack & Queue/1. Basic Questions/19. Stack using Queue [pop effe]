@@ -1,0 +1,64 @@
+#include <iostream>
+#include <queue>
+
+class QueueToStackAdapter {
+    std::queue<int> mainQ;
+
+public:
+    QueueToStackAdapter() {
+        // Constructor
+    }
+
+    int size() {
+        return mainQ.size();
+    }
+
+    void push(int val) {
+        std::queue<int> helperQ;
+        while (!mainQ.empty()) {
+            helperQ.push(mainQ.front());
+            mainQ.pop();
+        }
+
+        mainQ.push(val);
+
+        while (!helperQ.empty()) {
+            mainQ.push(helperQ.front());
+            helperQ.pop();
+        }
+    }
+
+    int pop() {
+        if (size() == 0) {
+            std::cout << "Stack underflow" << std::endl;
+            return -1;
+        }
+
+        int val = mainQ.front();
+        mainQ.pop();
+        return val;
+    }
+
+    int top() {
+        if (size() == 0) {
+            std::cout << "Stack underflow" << std::endl;
+            return -1;
+        }
+
+        return mainQ.front();
+    }
+};
+
+int main() {
+    // Example usage
+    QueueToStackAdapter stack;
+    stack.push(1);
+    stack.push(2);
+    stack.push(3);
+
+    std::cout << "Top element: " << stack.top() << std::endl;
+    std::cout << "Popped element: " << stack.pop() << std::endl;
+    std::cout << "Size of stack: " << stack.size() << std::endl;
+
+    return 0;
+}
