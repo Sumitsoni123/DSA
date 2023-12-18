@@ -1,0 +1,95 @@
+#include <iostream>
+#include <vector>
+
+class CustomQueue {
+private:
+    std::vector<int> data;
+    int front;
+    int rear;
+    int size;
+
+public:
+    CustomQueue(int cap) {
+        data.resize(cap);
+        front = 0;
+        rear = 0;
+        size = 0;
+    }
+
+    int getSize() {
+        return size;
+    }
+
+    void display() {
+        int count = 0;
+        int idx = front;
+        while (count < size) {
+            std::cout << data[idx] << " ";
+            idx = (idx + 1) % data.size();
+            count++;
+        }
+        std::cout << std::endl;
+    }
+
+    void add(int val) {
+        if (size == data.size()) {
+            std::cout << "Queue overflow" << std::endl;
+            return;
+        }
+        data[rear] = val;
+        rear = (rear + 1) % data.size();
+        size++;
+    }
+
+    int remove() {
+        if (size == 0) {
+            std::cout << "Queue underflow" << std::endl;
+            return -1;
+        }
+        int val = data[front];
+        front = (front + 1) % data.size();
+        size--;
+        return val;
+    }
+
+    int peek() {
+        if (size == 0) {
+            std::cout << "Queue underflow" << std::endl;
+            return -1;
+        }
+        return data[front];
+    }
+};
+
+int main() {
+    int n;
+    std::cin >> n;
+    CustomQueue qu(n);
+
+    std::string str;
+    std::cin.ignore(); // consume the newline after n
+    std::getline(std::cin, str);
+    while (str != "quit") {
+        if (str.find("add") == 0) {
+            int val = std::stoi(str.substr(4));
+            qu.add(val);
+        } else if (str == "remove") {
+            int val = qu.remove();
+            if (val != -1) {
+                std::cout << val << std::endl;
+            }
+        } else if (str == "peek") {
+            int val = qu.peek();
+            if (val != -1) {
+                std::cout << val << std::endl;
+            }
+        } else if (str == "size") {
+            std::cout << qu.getSize() << std::endl;
+        } else if (str == "display") {
+            qu.display();
+        }
+        std::getline(std::cin, str);
+    }
+
+    return 0;
+}
