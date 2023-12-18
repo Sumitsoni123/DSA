@@ -1,0 +1,64 @@
+#include <iostream>
+#include <stack>
+
+class StackToQueueAdapter {
+    std::stack<int> mainS;
+
+public:
+    StackToQueueAdapter() {
+        // Constructor
+    }
+
+    int size() {
+        return mainS.size();
+    }
+
+    void add(int val) {
+        std::stack<int> helperS;
+        while (!mainS.empty()) {
+            helperS.push(mainS.top());
+            mainS.pop();
+        }
+
+        mainS.push(val);
+
+        while (!helperS.empty()) {
+            mainS.push(helperS.top());
+            helperS.pop();
+        }
+    }
+
+    int remove() {
+        if (mainS.empty()) {
+            std::cout << "Queue underflow" << std::endl;
+            return -1;
+        }
+
+        int val = mainS.top();
+        mainS.pop();
+        return val;
+    }
+
+    int peek() {
+        if (mainS.empty()) {
+            std::cout << "Queue underflow" << std::endl;
+            return -1;
+        }
+
+        return mainS.top();
+    }
+};
+
+int main() {
+    // Example usage
+    StackToQueueAdapter queue;
+    queue.add(1);
+    queue.add(2);
+    queue.add(3);
+
+    std::cout << "Peek element: " << queue.peek() << std::endl;
+    std::cout << "Removed element: " << queue.remove() << std::endl;
+    std::cout << "Size of queue: " << queue.size() << std::endl;
+
+    return 0;
+}
