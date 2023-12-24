@@ -1,0 +1,58 @@
+Design a stack that supports increment operations on its elements.
+
+Implement the CustomStack class:
+
+CustomStack(int maxSize) Initializes the object with maxSize which is the maximum number of elements in the stack.
+void push(int x) Adds x to the top of the stack if the stack has not reached the maxSize.
+int pop() Pops and returns the top of the stack or -1 if the stack is empty.
+void inc(int k, int val) Increments the bottom k elements of the stack by val. If there are less than k elements in the stack, increment all the elements in the stack.
+
+
+class CustomStack {
+    vector<int> main;
+    vector<int> inc;
+    int top;
+public:
+    CustomStack(int maxSize) {
+        main.resize(maxSize);
+        inc.resize(maxSize);
+        top = -1;
+    }
+    
+    void push(int x) {
+        if(top == main.size() -1) {
+            return;
+        }
+        top++;
+        main[top] = x;
+    }
+    
+    int pop() {
+        if(top == -1) {
+            return -1;
+        }
+
+        int val = main[top] + inc[top];
+        if(top-1 >= 0) {
+            inc[top-1] += inc[top];
+        }
+        inc[top] = 0;
+        top--;
+        return val;
+    }
+    
+    void increment(int k, int val) {
+        if(top == -1) 
+            return;
+        k = min(k, top+1);
+        inc[k-1] = val;
+    }
+};
+
+/**
+ * Your CustomStack object will be instantiated and called as such:
+ * CustomStack* obj = new CustomStack(maxSize);
+ * obj->push(x);
+ * int param_2 = obj->pop();
+ * obj->increment(k,val);
+ */
