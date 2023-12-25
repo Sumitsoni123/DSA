@@ -1,0 +1,14 @@
+Reverse Queue using recursion without extra space
+
+class Solution {
+public:
+    static void reverse(std::queue<int>& q) {
+        if (q.empty())
+            return;
+        
+        int v = q.front();
+        q.pop();
+        reverse(q);
+        q.push(v);
+    }
+};
