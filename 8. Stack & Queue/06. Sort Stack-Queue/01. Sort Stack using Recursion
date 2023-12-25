@@ -1,0 +1,24 @@
+#include <bits/stdc++.h> 
+
+void insertAtCorrect(stack<int> &stack, int value) {
+
+	if(stack.empty() || stack.top() <= value) {
+		stack.push(value);
+		return;
+	}
+
+	int val = stack.top();
+	stack.pop();
+	insertAtCorrect(stack, value);
+	stack.push(val);		// pushing the remaining elments
+}
+
+void sortStack(stack<int> &stack) {
+	if(stack.empty()) 
+		return;
+
+	int val = stack.top();
+	stack.pop();
+	sortStack(stack);
+	insertAtCorrect(stack, val);
+}
