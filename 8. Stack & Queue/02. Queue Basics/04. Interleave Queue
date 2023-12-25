@@ -1,0 +1,18 @@
+
+putting alternate elements of queue first and second half
+
+void interLeaveQueue(std::queue<int>& q) {
+    std::queue<int> temp;
+
+    for (int i = 0; i < q.size() / 2; i++) {
+        temp.push(q.front());
+        q.pop();
+    }
+
+    while (!temp.empty()) {
+        q.push(temp.front());
+        temp.pop();
+        q.push(q.front());
+        q.pop();
+    }
+}
