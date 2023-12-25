@@ -1,0 +1,54 @@
+Implement k stacks using Array
+
+
+class NStack {
+    vector<int> arr;
+    vector<int> next;
+    vector<int> top;
+    int freeIdx;
+
+public:
+    NStack(int k, int n) {
+        arr.resize(n);
+        next.resize(n);
+        for (int i = 0; i < n; i++)
+            next[i] = i + 1;
+        next[n - 1] = -1;
+
+        top.resize(k);
+        for (int i = 0; i < k; i++)
+            top[i] = -1;
+
+        freeIdx = 0;
+    }
+
+    bool push(int x, int m) {
+        if (freeIdx == -1) {
+            return false;
+        }
+        int currIdx = freeIdx;
+
+        arr[currIdx] = x;
+        freeIdx = next[freeIdx];
+        next[currIdx] = top[m - 1];
+        top[m - 1] = currIdx;
+
+        return true;
+    }
+
+    int pop(int m) {
+        if (top[m - 1] == -1) {
+            return -1;
+        }
+
+        int currIdx = top[m - 1];
+        top[m - 1] = next[currIdx];
+        next[currIdx] = freeIdx;
+        freeIdx = currIdx;
+
+        int ans = arr[currIdx];
+        arr[currIdx] = 0;
+
+        return ans;
+    }
+};
