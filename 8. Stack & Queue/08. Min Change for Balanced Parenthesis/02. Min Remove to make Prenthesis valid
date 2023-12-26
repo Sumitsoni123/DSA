@@ -1,0 +1,37 @@
+Given a string s of '(' , ')' and lowercase English characters.
+
+Your task is to remove the minimum number of parentheses ( '(' or ')', in any positions ) so that the resulting parentheses string is valid and return any valid string.
+
+Formally, a parentheses string is valid if and only if:
+
+It is the empty string, contains only lowercase characters, or
+It can be written as AB (A concatenated with B), where A and B are valid strings, or
+It can be written as (A), where A is a valid string.
+
+
+class Solution {
+public:
+    string minRemoveToMakeValid(string s) {
+        deque<int> dq;
+        for (int i = 0; i < s.length(); i++) {
+            if (s[i] == ')') {
+                if (!dq.empty() && s[dq.back()] == '(')
+                    dq.pop_back();
+                else
+                    dq.push_back(i);
+            } else if (s[i] == '(')
+                dq.push_back(i);
+        }
+
+        string ans = "";
+        for (int i = 0; i < s.length(); i++) {
+            if (!dq.empty() && dq.front() == i) {
+                dq.pop_front();
+                continue;
+            }
+            ans += s[i];
+        }
+
+        return ans;
+    }
+};
