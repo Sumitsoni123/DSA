@@ -1,0 +1,56 @@
+Given an array of integers arr, find the sum of min(b), where b ranges over every (contiguous) subarray of arr. Since the answer may be large, return the answer modulo 109 + 7.
+
+
+class Solution {
+public:
+    vector<long> nsel(vector<int>& arr) {
+        vector<long> ans(arr.size(), -1);
+        stack<int> stk;
+
+        for (int i = 0; i < arr.size(); i++) {
+            while (!stk.empty() && arr[stk.top()] > arr[i]) {
+                stk.pop();
+            }
+            if (stk.empty()) {
+                ans[i] = -1;
+            } else {
+                ans[i] = stk.top();
+            }
+
+            stk.push(i);
+        }
+        return ans;
+    }
+
+    vector<long> nsr(vector<int>& arr) {
+        stack<int> stk;
+        vector<long> ans(arr.size(), arr.size());
+
+        for (int i = arr.size() - 1; i >= 0; i--) {
+            while (!stk.empty() && arr[stk.top()] >= arr[i]) {
+                stk.pop();
+            }
+            if (stk.empty()) {
+                ans[i] = arr.size();
+            } else {
+                ans[i] = stk.top();
+            }
+
+            stk.push(i);
+        }
+
+        return ans;
+    }
+
+    int sumSubarrayMins(vector<int>& arr) {
+        vector<long> nsel_arr = nsel(arr);
+        vector<long> nsr_arr = nsr(arr);
+
+        long res = 0;
+        for (int i = 0; i < arr.size(); i++) {
+            res += (arr[i] * (nsr_arr[i] - i) * (i - nsel_arr[i]));
+        }
+
+        return static_cast<int>(res % 1000000007);
+    }
+};
