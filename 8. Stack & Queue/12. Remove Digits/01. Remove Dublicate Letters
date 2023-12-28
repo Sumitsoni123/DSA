@@ -1,0 +1,38 @@
+Given a string s, remove duplicate letters so that every letter appears once and only once. You must make sure your result is 
+the smallest in lexicographical order among all possible results.
+
+
+ class Solution {
+public:
+    string removeDuplicateLetters(string s) {
+        vector<int> freq(26, 0);
+        vector<bool> inQ(26, false);
+
+        deque<char> q;
+
+        for (int i = 0; i < s.length(); i++)
+            freq[s[i] - 'a']++;
+
+        for (int i = 0; i < s.length(); i++) {
+            char ch = s[i];
+            freq[ch - 'a']--;
+
+            if (inQ[ch - 'a'] == true)
+                continue;
+
+            while (q.size() > 0 && q.back() > ch && freq[q.back() - 'a'] > 0)
+                inQ[q.back() - 'a'] = false, q.pop_back();
+
+            inQ[ch - 'a'] = true;
+            q.push_back(ch);
+        }
+
+        string ans = "";
+        while (!q.empty()) {
+            ans += q.front();
+            q.pop_front();
+        }
+
+        return ans;
+    }
+};
