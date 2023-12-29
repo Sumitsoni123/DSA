@@ -1,0 +1,62 @@
+Given a Linked List of size N, where every node represents a sub-linked-list and contains two pointers:
+(i) a next pointer to the next node,
+(ii) a bottom pointer to a linked list where this node is head.
+Each of the sub-linked-list is in sorted order.
+Flatten the Link List such that all the nodes appear in a single level while maintaining the sorted order. 
+
+
+/* Node structure  used in the program
+
+struct Node{
+	int data;
+	struct Node * next;
+	struct Node * bottom;
+	
+	Node(int x){
+	    data = x;
+	    next = NULL;
+	    bottom = NULL;
+	}
+	
+};
+*/
+
+/*  Function which returns the  root of 
+    the flattened linked list. */
+Node* merge(Node* a, Node* b) {
+        Node* dummy = new Node(-1);
+        Node* tail = dummy;
+
+        while (a != nullptr && b != nullptr) {
+            if (a->data <= b->data) {
+                tail->bottom = a;
+                tail = a;
+                a = a->bottom;
+            } else {
+                tail->bottom = b;
+                tail = b;
+                b = b->bottom;
+            }
+        }
+
+        while (a != nullptr) {
+            tail->bottom = a;
+            tail = a;
+            a = a->bottom;
+        }
+
+        while (b != nullptr) {
+            tail->bottom = b;
+            tail = b;
+            b = b->bottom;
+        }
+
+        return dummy->bottom;
+    }
+
+    Node* flatten(Node* root) {
+        if (root == nullptr || root->next == nullptr)
+            return root;
+        Node* b = flatten(root->next);
+        return merge(root, b);
+    }
