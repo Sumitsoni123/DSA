@@ -1,0 +1,29 @@
+Given two integer arrays pushed and popped each with distinct values, return true if this could have been the result of a sequence of push and pop operations on an initially empty stack, or false otherwise.
+
+
+
+class Solution {
+public:
+    bool validateStackSequences(vector<int>& pushed, vector<int>& popped) {
+        stack<int> stk;
+        unordered_set<int> inStack;
+        int i;
+        for (int j = 0; j < popped.size(); j++) {
+            if (inStack.find(popped[j]) != inStack.end()) {
+               if(stk.size() >0 && stk.top() == popped[j]) {
+                    stk.pop();
+               }
+                else
+                    return false;
+            } else {
+                while (i < pushed.size() && pushed[i] != popped[j]) {
+                    stk.push(pushed[i]);
+                    inStack.insert(pushed[i]);
+                    i++;
+                }
+                i++; // to push the element to be popped now
+            }
+        }
+        return (stk.size() == 0) ? true : false;
+    }
+};
