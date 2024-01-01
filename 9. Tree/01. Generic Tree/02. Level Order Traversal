@@ -1,0 +1,19 @@
+void levelOrder(Node* node) {
+    if (node == nullptr) {
+        return;
+    }
+
+    std::queue<Node*> q;
+    q.push(node);
+
+    while (!q.empty()) {
+        Node* curr = q.front();
+        q.pop();
+
+        std::cout << curr->data << " ";
+
+        for (Node* child : curr->children) {
+            q.push(child);
+        }
+    }
+}
