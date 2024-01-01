@@ -1,0 +1,17 @@
+void removeLeaves(Node* node) {
+    // Base case: if the current node is a leaf, remove it
+    if (node->children.size() == 0) {
+        return;
+    }
+
+    // Iterate over the children and remove leaves recursively
+    for (int i = node->children.size() - 1; i >= 0; i--) {
+        Node* child = node->children[i];
+        if (child->children.size() == 0) {
+            node->children.erase(node->children.begin() + i);
+            delete child; // Deallocate memory for removed leaf node
+        } else {
+            removeLeaves(child);
+        }
+    }
+}
