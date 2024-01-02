@@ -1,0 +1,18 @@
+vector<int> nodeToRootPath(Node* node, int data) {
+    // write your code here
+    if (node->data == data) {
+        vector<int> temp;
+        temp.push_back(node->data);
+        return temp;
+    }
+
+    for (Node* child : node->children) {
+        vector<int> res = nodeToRootPath(child, data);
+        if (!res.empty()) {
+            res.push_back(node->data);
+            return res;
+        }
+    }
+
+    return vector<int>();
+}
