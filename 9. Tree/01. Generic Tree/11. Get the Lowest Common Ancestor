@@ -1,0 +1,16 @@
+int lca(Node* node, int d1, int d2) {
+    // write your code here
+    vector<int> path1 = nodeToRootPath(node, d1);
+    vector<int> path2 = nodeToRootPath(node, d2);
+
+    int i = 0, j = 0;
+    while (i < path1.size() && j < path2.size()) {
+        if (path1[i] != path2[j]) {
+            i++;
+            j++;
+        } else {
+            break;
+        }
+    }
+    return path1[i];
+}
