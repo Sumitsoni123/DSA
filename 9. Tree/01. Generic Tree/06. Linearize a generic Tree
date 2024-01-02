@@ -25,18 +25,20 @@ void linearize(Node& node) {
 
 
 // ------  TC - O(n)  ----------------
-public static Node linearizeOpt(Node node){
-    // write your code here
-    if(node.children.size() == 0) 
+Node* linearizeOpt(Node* node) {
+    if (node->children.size() == 0) {
         return node;
-    
-    Node lastTreeTail = linearizeOpt(node.children.get(node.children.size()-1));
-    
-    while(node.children.size() > 1) {
-        Node lastTreeHead = node.children.remove(node.children.size()-1);
-        Node secondLastTreeTail = linearizeOpt(node.children.get(node.children.size()-1));
-        
-        secondLastTreeTail.children.add(lastTreeHead);
     }
+
+    Node* lastTreeTail = linearizeOpt(node->children[node->children.size() - 1]);
+
+    while (node->children.size() > 1) {
+        Node* lastTreeHead = node->children[node->children.size() - 1];
+        node->children.pop_back();
+        Node* secondLastTreeTail = linearizeOpt(node->children[node->children.size() - 1]);
+
+        secondLastTreeTail->children.push_back(lastTreeHead);
+    }
+
     return lastTreeTail;
-  }
+}
