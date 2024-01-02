@@ -1,0 +1,22 @@
+Node getLastNode(Node node) {
+    while (!node.children.empty()) {
+        node = node.children[0];
+    }
+    return node;
+}
+
+void linearize(Node& node) {
+    for (Node& child : node.children) {
+        linearize(child);
+    }
+
+    while (node.children.size() > 1) {
+        Node tree2 = node.children.back();
+        node.children.pop_back();
+
+        Node& tree1 = node.children.back();
+
+        Node lastNode = getLastNode(tree1);
+        lastNode.children.push_back(tree2);
+    }
+}
