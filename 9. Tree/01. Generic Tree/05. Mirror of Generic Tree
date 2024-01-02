@@ -1,0 +1,9 @@
+We can use both preorder and postorder call 
+
+
+void mirror(Node* node) {
+    for (Node* child : node->children) {
+        mirror(child);
+    }
+    std::reverse(node->children.begin(), node->children.end());
+}
