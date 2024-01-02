@@ -1,3 +1,5 @@
+// ----   TC - O{n^2} --------
+
 Node getLastNode(Node node) {
     while (!node.children.empty()) {
         node = node.children[0];
@@ -20,3 +22,21 @@ void linearize(Node& node) {
         lastNode.children.push_back(tree2);
     }
 }
+
+
+// ------  TC - O(n)  ----------------
+public static Node linearizeOpt(Node node){
+    // write your code here
+    if(node.children.size() == 0) 
+        return node;
+    
+    Node lastTreeTail = linearizeOpt(node.children.get(node.children.size()-1));
+    
+    while(node.children.size() > 1) {
+        Node lastTreeHead = node.children.remove(node.children.size()-1);
+        Node secondLastTreeTail = linearizeOpt(node.children.get(node.children.size()-1));
+        
+        secondLastTreeTail.children.add(lastTreeHead);
+    }
+    return lastTreeTail;
+  }
