@@ -1,0 +1,30 @@
+void levelOrderLinewiseZZ(Node* node) {
+    // write your code here
+    std::stack<Node*> mainStack;
+    bool flag = true;
+    mainStack.push(node);
+    
+    while (!mainStack.empty()) {
+        std::stack<Node*> childStack;
+        
+        while (!mainStack.empty()) {
+            Node* parent = mainStack.top();
+            mainStack.pop();
+            std::cout << parent->data << " ";
+
+            if (flag) {
+                for (int i = 0; i < parent->children.size(); i++) {
+                    childStack.push(parent->children[i]);
+                }
+            } else {
+                for (int i = parent->children.size() - 1; i >= 0; i--) {
+                    childStack.push(parent->children[i]);
+                }
+            }
+        }
+        
+        mainStack = childStack;
+        flag = !flag;
+        std::cout << std::endl;
+    }
+}
