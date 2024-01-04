@@ -27,7 +27,7 @@ void IterativePreandPostOrder(Node* node) {
             stk.pop();
         } else {
             // edge
-            Pair child(parent.node->children[parent.state], -1);
+            Pair child = Pair(parent.node->children[parent.state], -1);
             stk.push(child);
             parent.state++;
         }
