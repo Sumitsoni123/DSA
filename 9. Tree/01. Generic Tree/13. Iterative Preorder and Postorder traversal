@@ -14,23 +14,22 @@ void IterativePreandPostOrder(Node* node) {
     std::vector<int> preorder;
     std::vector<int> postorder;
 
-    while (!stk.empty()) {
+   while (!stk.empty()) {
         Pair parent = stk.top();
-        stk.pop();
 
         if (parent.state == -1) {
             // preorder
             preorder.push_back(parent.node->data);
             parent.state++;
-            stk.push(parent);
-            
-            for (int i = parent.node->children.size() - 1; i >= 0; --i) {
-                Pair child = Pair(parent.node->children[i], -1);
-                stk.push(child);
-            }
-        } else {
+        } else if (parent.state == parent.node->children.size()) {
             // postorder
             postorder.push_back(parent.node->data);
+            stk.pop();
+        } else {
+            // edge
+            Pair child(parent.node->children[parent.state], -1);
+            stk.push(child);
+            parent.state++;
         }
     }
 
