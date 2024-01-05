@@ -1,0 +1,100 @@
+#include <iostream>
+#include <vector>
+#include <stack>
+
+class Node {
+public:
+    int data;
+    std::vector<Node*> children;
+
+    Node(int value) : data(value) {}
+};
+
+void display(Node* node) {
+    std::cout << node->data << " -> ";
+    for (Node* child : node->children) {
+        std::cout << child->data << ", ";
+    }
+    std::cout << "." << std::endl;
+
+    for (Node* child : node->children) {
+        display(child);
+    }
+}
+
+Node* construct(const std::vector<int>& arr) {
+    Node* root = nullptr;
+    std::stack<Node*> st;
+
+    for (int i = 0; i < arr.size(); ++i) {
+        if (arr[i] == -1) {
+            st.pop();
+        } else {
+            Node* t = new Node(arr[i]);
+
+            if (!st.empty()) {
+                st.top()->children.push_back(t);
+            } else {
+                root = t;
+            }
+
+            st.push(t);
+        }
+    }
+
+    return root;
+}
+
+Node* predecessor = nullptr;
+Node* successor = nullptr;
+int state = -1;
+
+void predecessorAndSuccessor(Node* node, int data) {
+    if (state == -1) {
+        if (node->data == data)
+            state++;
+        else
+            predecessor = node;
+    } else if (state == 0) {
+        successor = node;
+        state++;
+        return;
+    }
+
+    for (Node* child : node->children) {
+        predecessorAndSuccessor(child, data);
+    }
+}
+
+int main() {
+    int n;
+    std::cin >> n;
+
+    std::vector<int> arr(n);
+    for (int i = 0; i < n; ++i) {
+        std::cin >> arr[i];
+    }
+
+    int data;
+    std::cin >> data;
+
+    Node* root = construct(arr);
+    predecessor = nullptr;
+    successor = nullptr;
+    state = -1;
+    predecessorAndSuccessor(root, data);
+
+    if (predecessor == nullptr) {
+        std::cout << "Predecessor = Not found" << std::endl;
+    } else {
+        std::cout << "Predecessor = " << predecessor->data << std::endl;
+    }
+
+    if (successor == nullptr) {
+        std::cout << "Successor = Not found" << std::endl;
+    } else {
+        std::cout << "Successor = " << successor->data << std::endl;
+    }
+
+    return 0;
+}
