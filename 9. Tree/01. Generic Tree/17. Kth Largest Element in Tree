@@ -1,0 +1,99 @@
+#include <iostream>
+#include <vector>
+#include <stack>
+
+class Node {
+public:
+    int data;
+    std::vector<Node*> children;
+
+    Node(int value) : data(value) {}
+};
+
+void display(Node* node) {
+    std::cout << node->data << " -> ";
+    for (Node* child : node->children) {
+        std::cout << child->data << ", ";
+    }
+    std::cout << "." << std::endl;
+
+    for (Node* child : node->children) {
+        display(child);
+    }
+}
+
+Node* construct(const std::vector<int>& arr) {
+    Node* root = nullptr;
+    std::stack<Node*> st;
+
+    for (int i = 0; i < arr.size(); ++i) {
+        if (arr[i] == -1) {
+            st.pop();
+        } else {
+            Node* t = new Node(arr[i]);
+
+            if (!st.empty()) {
+                st.top()->children.push_back(t);
+            } else {
+                root = t;
+            }
+
+            st.push(t);
+        }
+    }
+
+    return root;
+}
+
+int ceilValue = INT_MAX;
+int floorValue = INT_MIN;
+
+void ceilAndFloor(Node* node, int data) {
+    if (node->data > data) {
+        if (node->data < ceilValue) {
+            ceilValue = node->data;
+        }
+    }
+
+    if (node->data < data) {
+        if (node->data > floorValue) {
+            floorValue = node->data;
+        }
+    }
+
+    for (Node* child : node->children) {
+        ceilAndFloor(child, data);
+    }
+}
+
+int kthLargest(Node* node, int k) {
+    int data = INT_MAX;
+    floorValue = INT_MIN;
+
+    for (int i = 0; i < k; ++i) {
+        ceilAndFloor(node, data);
+        data = floorValue;
+        floorValue = INT_MIN;
+    }
+
+    return data;
+}
+
+int main() {
+    int n;
+    std::cin >> n;
+
+    std::vector<int> arr(n);
+    for (int i = 0; i < n; ++i) {
+        std::cin >> arr[i];
+    }
+
+    int k;
+    std::cin >> k;
+
+    Node* root = construct(arr);
+    int kthLargestValue = kthLargest(root, k);
+    std::cout << kthLargestValue << std::endl;
+
+    return 0;
+}
