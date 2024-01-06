@@ -24,7 +24,7 @@ public:
 
 Node* construct(vector<int>& arr) {
     Node* root = new Node(arr[0], nullptr, nullptr);
-    Pair rtp = Pair(root, 1);
+    Pair rtp = Pair(root, -1);
 
     stack<Pair> st;
     st.push(rtp);
@@ -32,22 +32,22 @@ Node* construct(vector<int>& arr) {
     int idx = 0;
     while (st.size() > 0) {
         Pair top = st.top();
-        if (top.state == 1) {
+        if (top.state == -1) {
             idx++;
             if (arr[idx] != NULL) {
                 top.node->left = new Node(arr[idx], nullptr, nullptr);
-                Pair lp = Pair(top.node->left, 1);
+                Pair lp = Pair(top.node->left, -1);
                 st.push(lp);
             } else {
                 top.node->left = nullptr;
             }
 
             top.state++;
-        } else if (top.state == 2) {
+        } else if (top.state == 0) {
             idx++;
             if (arr[idx] != NULL) {
                 top.node->right = new Node(arr[idx], nullptr, nullptr);
-                Pair rp = Pair(top.node->right, 1);
+                Pair rp = Pair(top.node->right, -1);
                 st.push(rp);
             } else {
                 top.node->right = nullptr;
