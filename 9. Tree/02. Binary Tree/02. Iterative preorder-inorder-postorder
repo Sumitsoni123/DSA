@@ -1,0 +1,42 @@
+void iterativePrePostInTraversal(Node* root) {
+    Pair rtp = Pair(root, -1);
+    stack<Pair> st;
+    st.push(rtp);
+    vector<int> preorder;
+    vector<int> inorder;
+    vector<int> postorder;
+
+    while (!st.empty()) {
+        Pair top = st.top();
+        if (top.state == -1) {
+            preorder.push_back(top.node->data);
+            if (top.node->left != nullptr) {
+                Pair lp = Pair(top.node->left, -1);
+                st.push(lp);
+            }
+
+            top.state++;
+        } else if (top.state == 0) {
+            inorder.push_back(top.node->data);
+            if (top.node->right != nullptr) {
+                Pair rp = Pair(top.node->right, -1);
+                st.push(rp);
+            }
+
+            top.state++;
+        } else {
+            postorder.push_back(top.node->data);
+            st.pop();
+        }
+    }
+
+    for (int i : preorder)
+        cout << i << " ";
+    cout << endl;
+    for (int i : inorder)
+        cout << i << " ";
+    cout << endl;
+    for (int i : postorder)
+        cout << i << " ";
+    cout << endl;
+}
