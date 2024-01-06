@@ -1,0 +1,21 @@
+vector<int> nodeToRootPath(Node* node, int data) {
+  // write your code here
+  if(node == nullptr) return {};
+  if(node->data == data) {
+      vector<int> temp;
+      temp.push_back(data);
+      return temp;
+  }
+  
+  vector<int> left = nodeToRootPath(node->left, data);
+  if(left.size() > 0) {
+      left.push_back(node->data);
+      return left;
+  }
+  vector<int> right = nodeToRootPath(node->right, data);
+  if(right.size() > 0) {
+      right.push_back(node->data);
+      return right;
+  }
+  return {};
+}
