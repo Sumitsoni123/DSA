@@ -1,0 +1,41 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left),
+ * right(right) {}
+ * };
+ */
+class Solution {
+public:
+    long total = 0;
+    void findPathSum(TreeNode* node, long currSum, int target, unordered_map<long, long> &um) {
+        if (node == nullptr)
+            return;
+
+        currSum += node->val;
+        if (um.find(currSum - target) != um.end())
+            total += um[currSum - target];
+        
+        um[currSum] = um[currSum] + 1;
+        findPathSum(node->left, currSum, target, um);
+        findPathSum(node->right, currSum, target, um);
+        um[currSum] = um[currSum] - 1;
+    }
+    
+    int pathSum(TreeNode* root, int sum) {
+        if (root == nullptr)
+            return 0;
+
+        unordered_map<long, long> um;
+        um[0] = 1;
+
+        findPathSum(root, 0, sum, um);
+
+        return total;
+    }
+};
