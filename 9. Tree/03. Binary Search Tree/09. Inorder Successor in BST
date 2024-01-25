@@ -1,0 +1,19 @@
+Given a BST, and a reference to a Node x in the BST. Find the Inorder Successor of the given node in the BST.
+
+
+class Solution{
+  public:
+    // returns the inorder successor of the Node x in BST (rooted at 'root')
+    Node * inOrderSuccessor(Node *root, Node *x)
+    {
+        Node* successor = NULL;
+        while(root != NULL) {
+            if(x->data < root->data) {
+                successor = root;
+                root = root->left;
+            } else 
+                root = root->right;
+        }
+        return successor;
+    }
+};
