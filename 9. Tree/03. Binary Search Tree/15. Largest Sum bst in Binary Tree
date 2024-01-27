@@ -1,0 +1,52 @@
+Given a binary tree root, return the maximum sum of all keys of any sub-tree which is also a Binary Search Tree (BST).
+
+Assume a BST is defined as follows:
+
+The left subtree of a node contains only nodes with keys less than the node's key.
+The right subtree of a node contains only nodes with keys greater than the node's key.
+Both the left and right subtrees must also be binary search trees.
+
+
+
+class Info {
+public:
+    int mini;
+    int maxi;
+    int sum;
+    bool isBST;
+};
+
+class Solution {
+private:
+    Info helper(TreeNode* root, int &maxSum) {
+        if (root == NULL) {
+            return {INT_MAX, INT_MIN, 0, true};
+        }
+
+        Info left = helper(root->left, maxSum);
+        Info right = helper(root->right, maxSum);
+
+        Info currNode;
+        currNode.mini = min(root->val, left.mini);
+        currNode.maxi = max(root->val, right.maxi);
+        currNode.sum = left.sum + right.sum + root->val;
+
+        if (left.isBST && right.isBST && root->val > left.maxi && root->val < right.mini) {
+            currNode.isBST = true;
+        } else {
+            currNode.isBST = false;
+        }
+
+        if (currNode.isBST) {
+            maxSum = max(maxSum, currNode.sum);
+        }
+        return currNode;
+    }
+
+public:
+    int maxSumBST(TreeNode* root) {
+        int maxSum = 0;
+        Info ans = helper(root, maxSum);
+        return maxSum;
+    }
+};
