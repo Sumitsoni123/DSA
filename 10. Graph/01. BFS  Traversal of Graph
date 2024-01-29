@@ -37,7 +37,7 @@ public:
 
 
 
-// -----------------------------------  Recursive BFS traversal -------------------------------------------
+// -----------------------------------  Original BFS traversal -------------------------------------------
 
 #include <bits/stdc++.h>
 using namespace std;
