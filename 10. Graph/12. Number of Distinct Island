@@ -1,6 +1,5 @@
 Given a boolean 2D matrix grid of size n * m. You have to find the number of distinct islands where a group of connected 1s (horizontally or vertically) forms an island. Two islands are considered to be distinct if and only if one island is not equal to another (not rotated or reflected).
 
-
 //---------------------------------------- TC-O{n*m* log(n*m)} + (n*m*4) ---------------------------------------
 class Solution {
     void dfs(int row, int col, vector<vector<int>>& grid, vector<vector<bool>> &vis, vector<pair<int, int>> &vect, int row0, int col0) {
