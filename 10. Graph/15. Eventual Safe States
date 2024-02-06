@@ -1,0 +1,47 @@
+A directed graph of V vertices and E edges is given in the form of an adjacency list adj. Each node of the graph is labelled with a distinct integer in the range 0 to V - 1.
+
+A node is a terminal node if there are no outgoing edges. A node is a safe node if every possible path starting from that node leads to a terminal node.
+
+You have to return an array containing all the safe nodes of the graph. The answer should be sorted in ascending order.
+
+
+
+class Solution {
+  private:
+    bool dfs(int node, vector<int> adj[], int vis[], int pathVis[], int check[]) {
+        vis[node] = 1;
+        pathVis[node] = 1;
+        check[node] = 0;
+        for(auto it: adj[node]) {
+            if(!vis[it]) {
+                if(dfs(it, adj, vis, pathVis, check))
+                    return true;
+            }
+            if(pathVis[it]) 
+                return true;
+        }
+        
+        check[node] = 1;
+        pathVis[node] = 0;
+        return false;
+    }
+  public:
+    vector<int> eventualSafeNodes(int V, vector<int> adj[]) {
+        // code here
+        int vis[V] = {0};
+        int pathVis[V] = {0};
+        int check[V] = {0};
+        
+        for(int i=0; i<V; i++) {
+            if(!vis[i]) {
+                dfs(i, adj, vis, pathVis, check);
+            }
+        }
+        vector<int> safeNode;
+        for(int i=0; i<V; i++) {
+            if(check[i]) 
+                safeNode.push_back(i);
+        }
+        return safeNode;
+    }
+};
