@@ -1,0 +1,46 @@
+There are n cities numbered from 0 to n-1. Given the array edges where edges[i] = [fromi , toi ,weighti]  represents a bidirectional and weighted edge between cities fromi and toi, and given the integer distanceThreshold. You need to find out a city with the smallest number of cities that are reachable through some path and whose distance is at most Threshold Distance, If there are multiple such cities, our answer will be the city with the greatest number.
+
+
+
+class Solution {
+public:
+    int findCity(int n, int m, vector<vector<int>>& edges, int distanceThreshold) {
+        vector<vector<int>> dist(n, vector<int>(n, INT_MAX));
+
+        // Populate the distance matrix with given edge weights
+        for(auto it: edges) {
+            dist[it[0]][it[1]] = it[2];
+            dist[it[1]][it[0]] = it[2];
+        }
+
+        // Initialize distances from a node to itself as 0
+        for(int i = 0; i < n; i++)
+            dist[i][i] = 0;
+
+        // Apply Floyd-Warshall algorithm to find shortest distances between all pairs of vertices
+        for(int via = 0; via < n; via++) {
+            for(int from = 0; from < n; from++) {
+                for(int to = 0; to < n; to++) {
+                    if(dist[from][via] != INT_MAX && dist[via][to] != INT_MAX)
+                        dist[from][to] = min(dist[from][to], dist[from][via] + dist[via][to]);
+                }
+            }
+        }
+
+        int ans = -1;
+        int minCnt = n; // Initialize minCnt to n, representing maximum possible cities
+        for(int i = 0; i < n; i++) {
+            int cnt = 0; // Counter for reachable cities within the distanceThreshold
+            for(int j = 0; j < n; j++) {
+                if(dist[i][j] <= distanceThreshold) // Note the use of <= to include the distanceThreshold
+                    cnt++;
+            }
+            if(cnt <= minCnt) { // If the number of reachable cities is less than or equal to the current minimum count
+                minCnt = cnt;
+                ans = i; // Update the answer to the current city index
+            }
+        }
+        
+        return ans;
+    }
+};
