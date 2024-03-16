@@ -1,0 +1,116 @@
+You are given an n x n binary matrix grid. You are allowed to change at most one 0 to be 1.
+
+Return the size of the largest island in grid after applying this operation.
+
+An island is a 4-directionally connected group of 1s.
+
+
+class DisjointSet {
+public:
+    vector<int> rank, parent, size;
+    DisjointSet(int n) {
+        rank.resize(n + 1, 0);
+        parent.resize(n + 1);
+        size.resize(n + 1);
+        for (int i = 0; i <= n; i++) {
+            parent[i] = i;
+            size[i] = 1;
+        }
+    }
+
+    int findUPar(int node) {
+        if (node == parent[node])
+            return node;
+        return parent[node] = findUPar(parent[node]);
+    }
+
+    void unionByRank(int u, int v) {
+        int ulp_u = findUPar(u);
+        int ulp_v = findUPar(v);
+        if (ulp_u == ulp_v) return;
+        if (rank[ulp_u] < rank[ulp_v]) {
+            parent[ulp_u] = ulp_v;
+        }
+        else if (rank[ulp_v] < rank[ulp_u]) {
+            parent[ulp_v] = ulp_u;
+        }
+        else {
+            parent[ulp_v] = ulp_u;
+            rank[ulp_u]++;
+        }
+    }
+
+    void unionBySize(int u, int v) {
+        int ulp_u = findUPar(u);
+        int ulp_v = findUPar(v);
+        if (ulp_u == ulp_v) return;
+        if (size[ulp_u] < size[ulp_v]) {
+            parent[ulp_u] = ulp_v;
+            size[ulp_v] += size[ulp_u];
+        }
+        else {
+            parent[ulp_v] = ulp_u;
+            size[ulp_u] += size[ulp_v];
+        }
+    }
+};
+
+class Solution {
+private:
+    bool isValid(int adjR, int adjC, vector<vector<int>>& grid, int n) {
+        return (adjR >=0 && adjR <n && adjC >=0 && adjC <n && grid[adjR][adjC] == 1);
+    }    
+public:
+    int largestIsland(vector<vector<int>>& grid) {
+        int n = grid.size();
+        DisjointSet ds(n*n);
+
+        int dx[] = {-1, 0, 1, 0};
+        int dy[] = {0, -1, 0, 1};
+        for(int r=0; r<n; r++) {
+            for(int c=0; c<n; c++) {
+                if(grid[r][c] == 0) continue;
+
+                for(int i=0; i<4; i++) {
+                    int adjR = r + dx[i];
+                    int adjC = c + dy[i];
+
+                    if(isValid(adjR, adjC, grid, n)) {
+                        int nodeNo = r*n + c;
+                        int adjNodeNo = adjR*n + adjC;
+                        ds.unionBySize(nodeNo, adjNodeNo);
+                    }
+                }
+            }
+        }
+
+        int mx = 0;
+        for(int r=0; r<n; r++) {
+            for(int c=0; c<n; c++) {
+                if(grid[r][c] == 1) continue;
+
+                set<int> grp;
+                for(int i=0; i<4; i++) {
+                    int adjR = r + dx[i];
+                    int adjC = c + dy[i];
+
+                    if(isValid(adjR, adjC, grid, n)) {
+                        grp.insert(ds.findUPar(adjR*n + adjC));
+                    }
+                }
+
+                int totalSize = 0;
+                for(auto it: grp) {
+                    totalSize += ds.size[it];
+                }
+                mx = max(mx, totalSize +1);
+            }
+        }
+        
+        // if all are 1 only
+        for(int e=0; e<n*n; e++) {
+            mx = max(mx, ds.size[ds.findUPar(e)]);
+        }
+        return mx;
+    }
+};
