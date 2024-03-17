@@ -1,0 +1,58 @@
+Given a Directed Graph with V vertices (Numbered from 0 to V-1) and E edges, Find the number of strongly connected components in the graph.
+
+
+class Solution {
+    private:
+    void dfs(int node, vector<int> &vis, vector<vector<int>> &adj, stack<int> &stk) {
+        vis[node] = 1;
+
+        for (auto it : adj[node]) {
+            if (!vis[it])
+                dfs(it, vis, adj, stk);
+        }
+
+        stk.push(node);
+    }
+    
+    void dfs1(int node, vector<int> &vis, vector<int> adj[]) {
+        vis[node] = 1;
+
+        for (auto it : adj[node]) {
+            if (!vis[it])
+                dfs1(it, vis, adj);
+        }
+    }
+
+	public:
+    int kosaraju(int V, vector<vector<int>> &adj) {
+        vector<int> vis(V, 0);
+        stack<int> stk;
+
+        for (int i = 0; i < V; i++) {
+            if (!vis[i]) {
+                dfs(i, vis, adj, stk);
+            }
+        }
+
+        vector<int> adjR[V];
+        for (int i = 0; i < V; i++) {
+            vis[i] = 0;
+            for (auto it : adj[i]) {
+                adjR[it].push_back(i);
+            }
+        }
+
+        int scc = 0;
+        while (!stk.empty()) {
+            int node = stk.top();
+            stk.pop();
+
+            if (!vis[node]) {
+                scc++;
+                dfs1(node, vis, adjR);
+            }
+        }
+
+        return scc;
+    }
+};
