@@ -1,0 +1,69 @@
+You are given an array/list ‘ARR’ of ‘N’ positive integers and an integer ‘K’. Your task is to check if there exists a subset in ‘ARR’ with a sum equal to ‘K’.
+
+Note: Return true if there exists a subset with sum equal to ‘K’. Otherwise, return false.
+
+For Example :
+If ‘ARR’ is {1,2,3,4} and ‘K’ = 4, then there exists 2 subsets with sum = 4. These are {1,3} and {4}. Hence, return true.
+
+
+#include <bits/stdc++.h>
+bool helper(int index, int target, vector<int> &arr, vector<vector<int>> &dp) {
+  if (target == 0)
+    return true;
+  if (index == 0)
+    return (arr[index] == target);
+
+  if (dp[index][target] != -1)
+    return dp[index][target];
+
+  bool not_taken = helper(index - 1, target, arr, dp);
+  bool taken = false;
+  if (target >= arr[index])
+    taken = helper(index - 1, target - arr[index], arr, dp);
+
+  return dp[index][target] = taken | not_taken;
+}
+
+bool subsetSumToK(int n, int k, vector<int> &arr) {
+  // Write your code here.
+
+  // memoization
+  //   vector<vector<int>> dp(n, vector<int>(k + 1, -1));
+  //   return helper(n - 1, k, arr, dp);
+
+  // tabulation
+  //   vector<vector<bool>> dp(n, vector<bool>(k + 1, false));
+  //   for (int i = 0; i < n; i++)
+  //     dp[i][0] = true;
+
+  //   dp[0][arr[0]] = true;
+
+  //   for (int index = 1; index < n; index++) {
+  //     for (int target = 1; target <= k; target++) {
+  //       bool not_taken = dp[index - 1][target];
+  //       bool taken = false;
+  //       if (target >= arr[index])
+  //         taken = dp[index - 1][target - arr[index]];
+
+  //       dp[index][target] = taken | not_taken;
+  //     }
+  //   }
+  //     return dp[n-1][k];
+
+  // space optimization
+  vector<bool> dp(k + 1, false), curr(k + 1, false);
+  dp[0] = true, dp[arr[0]] = true, curr[0] = true;
+
+  for (int index = 1; index < n; index++) {
+    for (int target = 1; target <= k; target++) {
+      bool not_taken = dp[target];
+      bool taken = false;
+      if (target >= arr[index])
+        taken = dp[target - arr[index]];
+
+      curr[target] = taken | not_taken;
+    }
+    dp = curr;
+  }
+  return dp[k];
+}
