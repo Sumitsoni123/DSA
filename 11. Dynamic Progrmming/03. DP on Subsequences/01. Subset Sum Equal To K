@@ -52,8 +52,8 @@ bool subsetSumToK(int n, int k, vector<int> &arr) {
 
   // space optimization
   vector<bool> dp(k + 1, false), curr(k + 1, false);
-  dp[0] = true, dp[arr[0]] = true, curr[0] = true;
-
+  dp[0] = true, curr[0] = true;
+  if(arr[0] <= k) dp[arr[0]] = true;
   for (int index = 1; index < n; index++) {
     for (int target = 1; target <= k; target++) {
       bool not_taken = dp[target];
